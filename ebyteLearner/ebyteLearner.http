@@ -1,0 +1,6 @@
+@ebyteLearner_HostAddress = http://localhost:5033
+
+GET {{ebyteLearner_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

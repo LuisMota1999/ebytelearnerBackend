@@ -1,0 +1,24 @@
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+
+namespace ebyteLearner.Models
+{
+    public class Pdf
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public Guid Id { get; init; }
+        public string PDFName { get; set; }
+        public int PDFNumberPages { get; set; }
+        public string PDFContent { get; set; }
+        public long PDFLength{ get; set; }
+
+        [ForeignKey("ModuleID")]
+        public Module Module { get; set; }
+        [JsonIgnore]
+        public Guid ModuleID { get; set; }
+        public DateTimeOffset CreatedDate { get; set; }
+        public DateTimeOffset UpdatedDate { get; set; }
+    }
+}
