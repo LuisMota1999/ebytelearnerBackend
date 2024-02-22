@@ -13,10 +13,15 @@ using ebyteLearner.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-builder.Services.AddCors(c =>
+builder.Services.AddCors(options =>
 {
-    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    options.AddPolicy("AllowOrigin", builder =>
+    {
+        builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
@@ -144,6 +149,8 @@ if (app.Environment.IsDevelopment())
 app.UseWebSockets(new WebSocketOptions { KeepAliveInterval = TimeSpan.FromSeconds(30) });
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowOrigin");
 
 app.Use((context, next) =>
 {
