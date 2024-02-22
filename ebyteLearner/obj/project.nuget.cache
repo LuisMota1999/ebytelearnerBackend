@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qyRCMFlJDoucvLrCW0osKiQ1PkYrtHihxFCK0ptZ+LcYiup7jwnoxT6fhV/BVhD5AaWhVtl7DE7bdV8XIClMmQ==",
+  "dgSpecHash": "/2DPlTZwfy0IixINVlUb1gxexWuVJjFV+URgyRkPBWCNiyHIWazboLFgm+iCQJ7OvssKHLlbNrx9E50kp34lKw==",
   "success": true,
-  "projectFilePath": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
+  "projectFilePath": "c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\LPMOTA\\.nuget\\packages\\automapper\\13.0.1\\automapper.13.0.1.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
@@ -104,12 +104,18 @@
     "C:\\Users\\LPMOTA\\.nuget\\packages\\system.text.json\\7.0.0\\system.text.json.7.0.0.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
-    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.15\\microsoft.windowsdesktop.app.ref.7.0.15.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.15\\microsoft.netcore.app.ref.7.0.15.nupkg.sha512",
+    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.15\\microsoft.windowsdesktop.app.ref.7.0.15.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.15\\microsoft.aspnetcore.app.ref.7.0.15.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.15\\microsoft.netcore.app.host.win-x64.7.0.15.nupkg.sha512"
   ],
   "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    },
     {
       "code": "NU1608",
       "level": "Warning",

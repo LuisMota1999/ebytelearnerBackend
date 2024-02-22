@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj": {}
+    "c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj": {
+    "c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
+        "projectUniqueName": "c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
         "projectName": "ebyteLearner",
-        "projectPath": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
+        "projectPath": "c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
         "packagesPath": "C:\\Users\\LPMOTA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\obj\\",
+        "outputPath": "c:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",

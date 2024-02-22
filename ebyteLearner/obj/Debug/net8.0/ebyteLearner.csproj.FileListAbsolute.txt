@@ -86,4 +86,7 @@ C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net8.0\refint\e
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net8.0\ebyteLearner.pdb
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net8.0\ebyteLearner.genruntimeconfig.cache
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net8.0\ref\ebyteLearner.dll
+<<<<<<< HEAD
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net8.0\ebyteLearner.sourcelink.json
+=======
+>>>>>>> 1cc7beb858b6f00a4c42bcf22f5b24eba0894ee5

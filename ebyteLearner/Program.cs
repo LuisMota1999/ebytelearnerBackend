@@ -9,8 +9,12 @@ using AutoMapper;
 using ebyteLearner.Helpers;
 using Microsoft.OpenApi.Models;
 using System.Text;
+<<<<<<< HEAD
 using ebyteLearner.Interfaces;
 using ebyteLearner.Mappers;
+=======
+using ebyteLearner.Interfaces; 
+>>>>>>> 1cc7beb858b6f00a4c42bcf22f5b24eba0894ee5
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -129,12 +133,16 @@ builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
 var mapperConfig = new MapperConfiguration(mc =>
 {
+<<<<<<< HEAD
     mc.AddProfile(new AuthMapper());
     mc.AddProfile(new UserMapper());
     mc.AddProfile(new CourseMapper());
     mc.AddProfile(new ModuleMapper());
     mc.AddProfile(new PdfMapper());
     mc.AddProfile(new SessionMapper());
+=======
+    mc.AddProfile(new AutoMapperProfile());
+>>>>>>> 1cc7beb858b6f00a4c42bcf22f5b24eba0894ee5
 });
 
 

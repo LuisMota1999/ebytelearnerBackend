@@ -1,8 +1,18 @@
 ﻿using AutoMapper;
+<<<<<<< HEAD
 using ebyteLearner.Data.Repository;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
 using ebyteLearner.DTOs.PDF;
+=======
+using iTextSharp.text.pdf;
+using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.Ocsp;
+using ebyteLearner.Data.Repository;
+using ebyteLearner.DTOs.NewFolder;
+using ebyteLearner.Helpers;
+using ebyteLearner.Models;
+>>>>>>> 1cc7beb858b6f00a4c42bcf22f5b24eba0894ee5
 
 
 namespace ebyteLearner.Services
