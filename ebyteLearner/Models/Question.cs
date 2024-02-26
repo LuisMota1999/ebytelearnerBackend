@@ -1,8 +1,6 @@
-using System;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
 
 namespace ebyteLearner.Models
 {
@@ -15,15 +13,10 @@ namespace ebyteLearner.Models
         public string QuestionName { get; set; }
         public List<Answer> Answers { get; set; }
         public float Score { get; set; }
+        public Guid PDFId { get; set; }
 
         [ForeignKey("PDFId")]
         public Pdf RelatedPDF { get; set; }
-        [JsonIgnore]
-        public Guid PDFId { get; set; }
-
-        [ForeignKey("SessionID")]
-        public Session RelatedSession { get; set; }
-        public Guid SessionID { get; set; }
         public DateTimeOffset CreatedDate { get; init; }
         public DateTimeOffset UpdatedDate { get; init; }
     }

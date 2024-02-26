@@ -10,7 +10,6 @@ namespace ebyteLearner.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; init; }
         public string AnswerResponse { get; set; }
-        public float AnswerScore { get; set; }
         public bool AnswerCorrect { get; set; }
 
         [ForeignKey("QuestionID")]

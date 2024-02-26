@@ -1,16 +1,18 @@
 ﻿using AutoMapper;
-using ebyteLearner.DTOs.User;
+using ebyteLearner.DTOs.Question;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace ebyteLearner.Data.Repository
 {
     public interface IQuestionRepository
     {
-
+        Task<QuestionDTO> Create(CreateQuestionRequestDTO request);
+        Task<QuestionDTO> Update(Guid id, UpdateQuestionRequestDTO request);
+        Task<QuestionDTO> Read(Guid id);
+        Task Delete(Guid id);
     }
-    public class QuestionRepository: IQuestionRepository
+    public class QuestionRepository : IQuestionRepository
     {
         private readonly DBContextService _dbContext;
         private readonly ILogger<QuestionRepository> _logger;
@@ -22,70 +24,73 @@ namespace ebyteLearner.Data.Repository
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<UserDTO> Update(Guid id, UpdateUserRequestDTO request)
+        public async Task<QuestionDTO> Create(CreateQuestionRequestDTO request)
         {
-            var userDB = await _dbContext.User.FindAsync(id);
-            if (userDB != null)
+            if (!_dbContext.Pdf.Any(x => x.Id.ToString() == request.PDFId.ToString()))
+                throw new AppException("PDF '" + request.PDFId + "' not found or does not exist");
+            
+            if (_dbContext.Question.FirstOrDefault(p => p.PDFId == request.PDFId && p.Slide == request.Slide) != null)
+                throw new AppException("PDF '" + request.PDFId + "' already has a question in slide " + request.Slide);
+            
+            var questionObj = new Question
             {
-                _mapper.Map(request, userDB);
+                Slide = request.Slide,
+                QuestionName = request.QuestionName,
+                Score = request.Score,
+                PDFId = request.PDFId,
+                CreatedDate = request.CreatedDate
+            };
+
+            var question = _mapper.Map<Question>(questionObj);
+
+            _dbContext.Question.Add(question);
+
+            await _dbContext.SaveChangesAsync();
+
+            var questionResponse = _mapper.Map<QuestionDTO>(questionObj);
+            return questionResponse;
+        }
+
+        public async Task<QuestionDTO> Update(Guid id, UpdateQuestionRequestDTO request)
+        {
+            var questionDB = await _dbContext.Question.FindAsync(id);
+            if (questionDB != null)
+            {
+                _mapper.Map(request, questionDB);
                 await _dbContext.SaveChangesAsync();
-                var updatedUserResponse = _mapper.Map<UserDTO>(userDB);
-                return updatedUserResponse;
+                var updatedQuestionResponse = _mapper.Map<QuestionDTO>(questionDB);
+                return updatedQuestionResponse;
             }
             else
             {
-                throw new AppException("User '" + id + "' not found");
+                throw new AppException("Question '" + id + "' not found");
             }
         }
 
-        public async Task<UserDTO> Read(Guid id)
+        public async Task<QuestionDTO> Read(Guid id)
         {
-            var userDB = await _dbContext.User.FindAsync(id);
-            if (userDB != null)
+            var questionDB = await _dbContext.Question.FindAsync(id);
+            if (questionDB != null)
             {
-                var userResponse = _mapper.Map<UserDTO>(userDB);
-                return userResponse;
+                var questionResponse = _mapper.Map<QuestionDTO>(questionDB);
+                return questionResponse;
             }
             else
-                throw new AppException("User '" + id + "' not found");
+                throw new AppException("Question '" + id + "' not found");
         }
 
         public async Task Delete(Guid id)
         {
-            var user = await _dbContext.User.FindAsync(id);
-            if (user != null)
+            var questionDB = await _dbContext.Question.FindAsync(id);
+            if (questionDB != null)
             {
-                _dbContext.Remove(user);
+                _dbContext.Remove(questionDB);
                 await _dbContext.SaveChangesAsync();
             }
             else
             {
-                throw new AppException($"User '{id}' not found");
+                throw new AppException($"Question '{id}' not found");
             }
-        }
-
-        public IQueryable<UserDTO> ReadAllUsers()
-        {
-            return _dbContext.User.Select(u => _mapper.Map<UserDTO>(u));
-        }
-
-        public IQueryable<UserDTO> SearchUsers(string searchQuery)
-        {
-            if (string.IsNullOrWhiteSpace(searchQuery))
-            {
-                throw new ArgumentException("Search query cannot be empty");
-            }
-
-            searchQuery = SanitizeSearchQuery(searchQuery);
-
-            return _dbContext.User
-                .Where(u => EF.Functions.Like(u.Username, $"%{searchQuery}%"))
-                .Select(u => _mapper.Map<UserDTO>(u));
-        }
-
-        private string SanitizeSearchQuery(string searchQuery)
-        {
-            return searchQuery;
         }
     }
 }

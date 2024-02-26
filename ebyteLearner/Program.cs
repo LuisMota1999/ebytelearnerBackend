@@ -114,6 +114,7 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 builder.Services.AddScoped<IPDFRepository, PDFRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<ISessionRepository, SessionRepository>();
 
 //Services
@@ -123,6 +124,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IPDFService, PDFService>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
@@ -134,8 +136,9 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new CourseMapper());
     mc.AddProfile(new ModuleMapper());
     mc.AddProfile(new PdfMapper());
+    mc.AddProfile(new QuestionMapper());
     mc.AddProfile(new SessionMapper());
-
+    
 });
 
 
