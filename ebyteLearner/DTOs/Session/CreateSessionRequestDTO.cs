@@ -9,13 +9,11 @@ namespace ebyteLearner.DTOs.Module
         public string SessionName { get; set; }
         public string SessionDescription { get; set; }
         [Required]
-        public byte[] QRCode { get; set; }
-        [Required]
         public Guid ModuleID { get; set; }
         [Required]
-        public DateTimeOffset StartSessionDate { get; set; }
+        public DateTimeOffset StartSessionDate { get; set; } = DateTimeOffset.UtcNow;
         [Required]
-        public DateTimeOffset EndSessionDate { get; set; }
-        public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.Now;
+        public DateTimeOffset EndSessionDate { get; set; } = DateTimeOffset.UtcNow.AddHours(1);
+        public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.UtcNow;
     }
 }

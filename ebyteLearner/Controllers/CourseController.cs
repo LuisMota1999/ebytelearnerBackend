@@ -7,7 +7,7 @@ namespace ebyteLearner.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     public class CourseController : ControllerBase
     {
         private readonly ICourseService _courseService;
@@ -23,6 +23,11 @@ namespace ebyteLearner.Controllers
         public IActionResult GetAllCourses()
         {
             var response = _courseService.GetAllCourses().Result;
+            if(response == null)
+            {
+                return NotFound();
+            }
+
             return Ok(response);
         }
 

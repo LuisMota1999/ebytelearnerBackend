@@ -5,6 +5,7 @@ using ebyteLearner.DTOs.Module;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
 using ebyteLearner.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace ebyteLearner.Data.Repository
 {
@@ -98,7 +99,7 @@ namespace ebyteLearner.Data.Repository
 
             if (coursesWithModules == null || !coursesWithModules.Any())
             {
-                throw new AppException("Courses not found");
+                return null;
             }
 
             var courseDTOs = coursesWithModules.Select(course => new CourseDTO
