@@ -34,7 +34,7 @@ namespace ebyteLearner.Data.Repository
                 throw new AppException("Module '" + request.ModuleID + "' not found or do not exist");
 
             var pdf = _mapper.Map<Pdf>(request);
-
+            pdf.PDFPath = "https://uploadthing-prod.s3.us-west-2.amazonaws.com/" + pdf.Id.ToString();
             _dbContext.Pdf.Add(pdf);
             await _dbContext.SaveChangesAsync();
         }

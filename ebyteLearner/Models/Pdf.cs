@@ -13,6 +13,7 @@ namespace ebyteLearner.Models
         public int PDFNumberPages { get; set; }
         public string PDFContent { get; set; }
         public long PDFLength{ get; set; }
+        public string PDFPath { get; set; }
 
         [ForeignKey("ModuleID")]
         public Module Module { get; set; }
