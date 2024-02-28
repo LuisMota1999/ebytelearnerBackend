@@ -1,9 +1,3 @@
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
-using System.Data;
-
 namespace ebyteLearner.Models
 {
     public class UserDTO

@@ -119,7 +119,8 @@ namespace ebyteLearner.Services
             var response = new AuthResponseDTO
             {
                 User = userDTO,
-                AccessToken = accessToken
+                AccessToken = accessToken,
+                Role = user.UserRole.ToString(),
             };
 
             return response;
