@@ -7,6 +7,7 @@ namespace ebyteLearner.DTOs.Course
         public Guid Id { get; set; }
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
+        public float CoursePrice { get; set; }
         public List<ModuleDTO> Modules { get; set; }
     }
 }

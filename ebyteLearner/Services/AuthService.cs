@@ -46,6 +46,9 @@ namespace ebyteLearner.Services
             if (_dbContext.User.Any(x => x.NIF == request.NIF))
                 throw new AppException("NIF '" + request.NIF + "' is already registered");
 
+            if (IsValidEmail(request.Email) == false)
+                throw new AppException("Email '" + request.Email + "' is not valid");
+
             // map model to new user object
             var user = _mapper.Map<User>(request);
 
@@ -130,6 +133,25 @@ namespace ebyteLearner.Services
         public void Logout()
         {
             return;
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            var trimmedEmail = email.Trim();
+
+            if (trimmedEmail.EndsWith("."))
+            {
+                return false; 
+            }
+            try
+            {
+                var addr = new System.Net.Mail.MailAddress(email);
+                return addr.Address == trimmedEmail;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

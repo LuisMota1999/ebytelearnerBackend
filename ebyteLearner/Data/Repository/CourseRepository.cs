@@ -107,6 +107,7 @@ namespace ebyteLearner.Data.Repository
                 Id = course.Id,
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
+                CoursePrice = course.CoursePrice,
                 Modules = course.Modules.Select(module => new ModuleDTO
                 {
                     Id = module.Id,
