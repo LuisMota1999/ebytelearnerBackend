@@ -21,6 +21,7 @@ namespace ebyteLearner.Services
         private readonly DBContextService _dbContext;
         private readonly ILogger<UserService> _logger;
         private readonly IJwtUtils _jwtUtils;
+        private readonly ICacheService _cacheService;
         private readonly IMapper _mapper;
         private PTEID_ReaderSet readerSet = null;
         private PTEID_ReaderContext readerContext = null;
@@ -29,12 +30,13 @@ namespace ebyteLearner.Services
        
 
 
-        public AuthService(DBContextService dbContext, ILogger<UserService> logger, IMapper mapper, IJwtUtils jwtUtils)
+        public AuthService(DBContextService dbContext, ILogger<UserService> logger, IMapper mapper, IJwtUtils jwtUtils, ICacheService cacheService)
         {
             _dbContext = dbContext;
             _logger = logger;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
             _jwtUtils = jwtUtils ?? throw new ArgumentNullException(nameof(jwtUtils));
+            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
         }
 
         public void RegisterUser(RegisterRequestDTO request)
@@ -104,6 +106,10 @@ namespace ebyteLearner.Services
 
         public AuthResponseDTO LoginCredentials(AuthRequestDTO credentials)
         {
+            var cachedUser = _cacheService.GetData<AuthResponseDTO>("userAuth");
+            if (cachedUser != null)
+                return cachedUser;
+
             var user = _dbContext.User.SingleOrDefault(x => x.Username == credentials.Username);
 
             if (user == null || !BCryptNet.Verify(credentials.Password, user.Password))
@@ -122,6 +128,9 @@ namespace ebyteLearner.Services
                 AccessToken = accessToken,
                 Role = user.UserRole.ToString(),
             };
+
+            var expiryTime = DateTimeOffset.Now.AddMinutes(5);
+            _cacheService.SetData<AuthResponseDTO>("userAuth", response, expiryTime);
 
             return response;
         }

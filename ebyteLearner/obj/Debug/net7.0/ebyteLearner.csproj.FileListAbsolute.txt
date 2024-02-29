@@ -179,9 +179,6 @@ C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win-x64\native\avx2\libllama.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win-x64\native\avx512\libllama.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win-x64\native\libllama.dll
-C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\pteidlib_dotnet.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\staticwebassets.build.json
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\staticwebassets.development.json
@@ -197,3 +194,13 @@ C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\refint\e
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\ebyteLearner.pdb
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\ebyteLearner.genruntimeconfig.cache
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\ref\ebyteLearner.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\System.Configuration.ConfigurationManager.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\System.Runtime.Caching.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\System.Security.Permissions.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\System.Windows.Extensions.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Drawing.Common.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Runtime.Caching.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Security.Cryptography.ProtectedData.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Windows.Extensions.dll

@@ -2,7 +2,6 @@
 using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.Course;
 using ebyteLearner.Helpers;
-using ebyteLearner.Models;
 
 namespace ebyteLearner.Services
 {
@@ -20,18 +19,30 @@ namespace ebyteLearner.Services
     {
 
         private readonly ICourseRepository _courseRepository;
+        private readonly ICacheService _cacheService;
         private readonly ILogger<CourseService> _logger;
         private readonly IMapper _mapper;
-        public CourseService(ICourseRepository courseRepository, ILogger<CourseService> logger, IMapper mapper)
+        public CourseService(ICourseRepository courseRepository, ILogger<CourseService> logger, IMapper mapper, ICacheService cacheService)
         {
             _courseRepository = courseRepository;
             _logger = logger;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService)); ;
         }
 
         public async Task<CourseDTO> GetCourse(Guid id)
         {
-            return await _courseRepository.Read(id);
+            var cachedCourse = _cacheService.GetData<CourseDTO>("GetCourse");
+            if (cachedCourse != null)
+                return cachedCourse;
+
+
+            var expiryTime = DateTimeOffset.Now.AddMinutes(5);
+
+            var response = await _courseRepository.Read(id);
+            _cacheService.SetData<CourseDTO>("GetCourse", response, expiryTime);
+
+            return response;
         }
 
         public async Task CreateCourse(CreateCourseRequestDTO request)
@@ -51,7 +62,16 @@ namespace ebyteLearner.Services
 
         public async Task<IEnumerable<CourseDTO>> GetAllCourses()
         {
-            return await _courseRepository.ReadAllCourses();
+            var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
+            if (cachedCourses != null)
+                return cachedCourses;
+
+            var expiryTime = DateTimeOffset.Now.AddMinutes(5);
+
+            var response = await _courseRepository.ReadAllCourses();
+            _cacheService.SetData<IEnumerable<CourseDTO>>("GetAllCourses", response, expiryTime);
+
+            return response;
         }
 
         public async Task AssocModuleToCourse(AssociateModuleRequest associateModuleRequest)

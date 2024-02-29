@@ -126,7 +126,9 @@ builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IPDFService, PDFService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<ICacheService, CacheService>();
 
+//Utils
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
 
 var mapperConfig = new MapperConfiguration(mc =>

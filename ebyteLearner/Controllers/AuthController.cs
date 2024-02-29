@@ -20,6 +20,7 @@ namespace ebyteLearner.Controllers
         {
             _logger = logger;
             _authService = authService ?? throw new ArgumentNullException(nameof(authService));
+            
         }
 
         [AllowAnonymous]
@@ -33,7 +34,9 @@ namespace ebyteLearner.Controllers
         [HttpPost("Login")]
         public IActionResult Auth([FromBody] AuthRequestDTO credentials)
         {
+
             var response = _authService.LoginCredentials(credentials);
+                        
             return Ok(response);
         }
 
