@@ -36,7 +36,9 @@ namespace ebyteLearner.Controllers
         {
 
             var response = _authService.LoginCredentials(credentials);
-                        
+            if (response == null)
+                return Unauthorized();
+
             return Ok(response);
         }
 

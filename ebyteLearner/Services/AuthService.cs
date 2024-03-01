@@ -106,15 +106,12 @@ namespace ebyteLearner.Services
 
         public AuthResponseDTO LoginCredentials(AuthRequestDTO credentials)
         {
-            var cachedUser = _cacheService.GetData<AuthResponseDTO>("userAuth");
-            if (cachedUser != null)
-                return cachedUser;
-
+            
             var user = _dbContext.User.SingleOrDefault(x => x.Username == credentials.Username);
 
             if (user == null || !BCryptNet.Verify(credentials.Password, user.Password))
-                throw new AppException("Username or password is incorrect");
-
+                return null;
+               
             // Mapear o objeto User para UserDTO
             var userDTO = _mapper.Map<UserDTO>(user);
 
@@ -128,9 +125,6 @@ namespace ebyteLearner.Services
                 AccessToken = accessToken,
                 Role = user.UserRole.ToString(),
             };
-
-            var expiryTime = DateTimeOffset.Now.AddMinutes(5);
-            _cacheService.SetData<AuthResponseDTO>("userAuth", response, expiryTime);
 
             return response;
         }
