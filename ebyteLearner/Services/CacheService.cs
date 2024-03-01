@@ -1,6 +1,6 @@
 ﻿using ebyteLearner.Helpers;
-using Newtonsoft.Json.Linq;
 using System.Runtime.Caching;
+
 namespace ebyteLearner.Services
 {
     public interface ICacheService
@@ -12,8 +12,11 @@ namespace ebyteLearner.Services
     public class CacheService : ICacheService
     {
         private ObjectCache _memoryCache = MemoryCache.Default;
+        private SemaphoreSlim semaphore = new SemaphoreSlim(1);
+
         public T GetData<T>(string Key)
         {
+            semaphore.Wait();
             try
             {
                 T item = (T)_memoryCache.Get(Key);
@@ -22,6 +25,10 @@ namespace ebyteLearner.Services
             catch (Exception ex)
             {
                 throw new AppException($"Error found: '{ex.Message}'");
+            }
+            finally
+            {
+                semaphore.Release();
             }
 
         }
@@ -48,6 +55,7 @@ namespace ebyteLearner.Services
         public bool SetData<T>(string key, T value, DateTimeOffset expirationTime)
         {
             var result = true;
+            semaphore.Wait();
             try
             {
                 if (!string.IsNullOrEmpty(key) && value != null)
@@ -61,6 +69,10 @@ namespace ebyteLearner.Services
             catch (Exception ex)
             {
                 throw new AppException($"Error found: '{ex.Message}'");
+            }
+            finally
+            {
+                semaphore.Release();
             }
         }
     }

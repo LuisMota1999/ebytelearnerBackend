@@ -1,5 +1,4 @@
 ﻿using ebyteLearner.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.DTOs.Auth
 {

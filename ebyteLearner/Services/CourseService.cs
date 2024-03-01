@@ -32,31 +32,36 @@ namespace ebyteLearner.Services
 
         public async Task<CourseDTO> GetCourse(Guid id)
         {
-            var cachedCourse = _cacheService.GetData<CourseDTO>("GetCourse");
+            var cachedCourse = _cacheService.GetData<CourseDTO>(id.ToString());
             if (cachedCourse != null)
                 return cachedCourse;
 
-
-            var expiryTime = DateTimeOffset.Now.AddMinutes(5);
+            var expiryTime = DateTimeOffset.Now.AddMinutes(60);
 
             var response = await _courseRepository.Read(id);
-            _cacheService.SetData<CourseDTO>("GetCourse", response, expiryTime);
+            _cacheService.SetData<CourseDTO>(id.ToString(), response, expiryTime);
 
             return response;
         }
 
         public async Task CreateCourse(CreateCourseRequestDTO request)
         {
+            _cacheService.RemoveData("GetAllCourses");
             await _courseRepository.Create(request);
         }
 
         public async Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
         {
-            return await _courseRepository.Update(id,request);
+            var response = await _courseRepository.Update(id, request);
+            var expiryTime = DateTimeOffset.Now.AddMinutes(60);
+            _cacheService.SetData<CourseDTO>(id.ToString(), response, expiryTime);
+            return response;
         }
 
         public async Task DeleteCourse(Guid id)
         {
+            _cacheService.RemoveData(id.ToString());
+
             await _courseRepository.Delete(id);
         }
 
@@ -93,5 +98,5 @@ namespace ebyteLearner.Services
 
     }
 
-    
+
 }

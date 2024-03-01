@@ -10,7 +10,7 @@ namespace ebyteLearner.Services
 {
     public interface IAuthService
     {
-        void RegisterUser(RegisterRequestDTO request);
+        UserDTO RegisterUser(RegisterRequestDTO request);
         Task<AuthResponseDTO> LoginCitizenCard();
         AuthResponseDTO LoginCredentials(AuthRequestDTO credentials);
         void ForgotPassword();
@@ -39,7 +39,7 @@ namespace ebyteLearner.Services
             _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
         }
 
-        public void RegisterUser(RegisterRequestDTO request)
+        public UserDTO RegisterUser(RegisterRequestDTO request)
         {
             // validate
             if (_dbContext.User.Any(x => x.Username == request.Username))
@@ -60,6 +60,10 @@ namespace ebyteLearner.Services
             // save user
             _dbContext.User.Add(user);
             _dbContext.SaveChanges();
+
+            var userDTO = _mapper.Map<UserDTO>(user);
+
+            return userDTO;
         }
 
         public async Task<AuthResponseDTO?> LoginCitizenCard()

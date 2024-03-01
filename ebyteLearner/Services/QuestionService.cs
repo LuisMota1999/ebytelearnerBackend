@@ -1,10 +1,6 @@
 ﻿using AutoMapper;
 using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.Question;
-using ebyteLearner.Helpers;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace ebyteLearner.Services
 {

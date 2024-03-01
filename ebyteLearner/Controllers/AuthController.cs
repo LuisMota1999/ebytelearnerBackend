@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.Auth;
 using ebyteLearner.Services;
 
@@ -47,8 +46,8 @@ namespace ebyteLearner.Controllers
         public IActionResult RegisterUser([FromBody] RegisterRequestDTO request)
         {
 
-            _authService.RegisterUser(request);
-            return Ok(new { message = "Registration successful" });
+            var response = _authService.RegisterUser(request);
+            return Ok(response);
 
         }
     }

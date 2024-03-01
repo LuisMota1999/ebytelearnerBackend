@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations.Schema;
-
+﻿
 namespace ebyteLearner.Models
 {
     public class UserSession
