@@ -27,8 +27,6 @@ namespace ebyteLearner.Services
         private PTEID_ReaderContext readerContext = null;
         private PTEID_EIDCard eidCard = null;
         private PTEID_EId eid = null;
-       
-
 
         public AuthService(DBContextService dbContext, ILogger<UserService> logger, IMapper mapper, IJwtUtils jwtUtils, ICacheService cacheService)
         {

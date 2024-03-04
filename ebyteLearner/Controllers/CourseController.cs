@@ -20,10 +20,11 @@ namespace ebyteLearner.Controllers
         }
 
         [HttpGet("All")]
-        public IActionResult GetAllCourses()
+        public async Task<IActionResult> GetAllCourses([FromQuery] int returnRows = 0)
         {
-            var response = _courseService.GetAllCourses().Result;
-            if(response == null)
+            var response = await _courseService.GetAllCourses(returnRows);
+
+            if (response == null)
             {
                 return NotFound();
             }

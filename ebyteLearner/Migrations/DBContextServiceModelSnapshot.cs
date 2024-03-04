@@ -67,10 +67,15 @@ namespace ebyteLearner.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<Guid>("TeacherID")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("TeacherID");
 
                     b.ToTable("Course");
                 });
@@ -130,6 +135,10 @@ namespace ebyteLearner.Migrations
 
                     b.Property<int>("PDFNumberPages")
                         .HasColumnType("int");
+
+                    b.Property<string>("PDFPath")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetime(6)");
@@ -326,6 +335,12 @@ namespace ebyteLearner.Migrations
                     b.Property<Guid>("SessionId")
                         .HasColumnType("char(36)");
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("UserId", "SessionId");
 
                     b.HasIndex("SessionId");
@@ -342,6 +357,17 @@ namespace ebyteLearner.Migrations
                         .IsRequired();
 
                     b.Navigation("Question");
+                });
+
+            modelBuilder.Entity("ebyteLearner.Models.Course", b =>
+                {
+                    b.HasOne("ebyteLearner.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("TeacherID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ebyteLearner.Models.Module", b =>

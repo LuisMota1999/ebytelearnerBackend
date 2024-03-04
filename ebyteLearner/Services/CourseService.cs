@@ -7,7 +7,7 @@ namespace ebyteLearner.Services
 {
     public interface ICourseService
     {
-        Task<IEnumerable<CourseDTO>> GetAllCourses();
+        Task<IEnumerable<CourseDTO>> GetAllCourses(int returnRows = 0);
         Task<CourseDTO> GetCourse(Guid id);
         Task CreateCourse(CreateCourseRequestDTO request);
         Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request);
@@ -65,16 +65,22 @@ namespace ebyteLearner.Services
             await _courseRepository.Delete(id);
         }
 
-        public async Task<IEnumerable<CourseDTO>> GetAllCourses()
+        public async Task<IEnumerable<CourseDTO>> GetAllCourses(int returnRows = 10)
         {
             var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
             if (cachedCourses != null)
-                return cachedCourses;
+                return cachedCourses.TakeLast(returnRows);
 
             var expiryTime = DateTimeOffset.Now.AddMinutes(5);
 
             var response = await _courseRepository.ReadAllCourses();
+
             _cacheService.SetData<IEnumerable<CourseDTO>>("GetAllCourses", response, expiryTime);
+
+            if (returnRows > 0)
+            {
+                response = response.TakeLast(returnRows);
+            }
 
             return response;
         }

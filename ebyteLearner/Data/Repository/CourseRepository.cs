@@ -4,8 +4,7 @@ using ebyteLearner.DTOs.Course;
 using ebyteLearner.DTOs.Module;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
-using ebyteLearner.Services;
-using Microsoft.AspNetCore.Http.HttpResults;
+
 
 namespace ebyteLearner.Data.Repository
 {
@@ -72,14 +71,34 @@ namespace ebyteLearner.Data.Repository
             var courseDB = _dbContext.Course.Find(id);
             if (courseDB != null)
             {
+                // Update only if there are changes
                 _mapper.Map(request, courseDB);
-                await _dbContext.SaveChangesAsync();
-                var updatedCourseResponse = _mapper.Map<CourseDTO>(courseDB);
-                return updatedCourseResponse;
+                _dbContext.Entry(courseDB).State = EntityState.Modified;
+
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                    return _mapper.Map<CourseDTO>(courseDB);
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    // Handle concurrency conflicts
+                    // Log the exception and return an appropriate response
+                    throw new AppException("Concurrency conflict occurred while updating the course.", ex);
+                }
+                catch (DbUpdateException ex)
+                {
+                    // Handle database update exception
+                    // Log the exception and return an appropriate response
+                    throw new AppException("Error occurred while updating the course in the database.", ex);
+                }
             }
             else
-                throw new AppException("Course '" + id + "' not found");
+            {
+                throw new AppException($"Course with ID '{id}' not found.");
+            }
         }
+
         public async Task Delete(Guid id)
         {
             var course = await _dbContext.Course.FindAsync(id);
