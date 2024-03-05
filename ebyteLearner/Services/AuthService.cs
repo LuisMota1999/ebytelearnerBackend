@@ -43,9 +43,6 @@ namespace ebyteLearner.Services
             if (_dbContext.User.Any(x => x.Username == request.Username))
                 throw new AppException("Username '" + request.Username + "' is already taken");
 
-            if (_dbContext.User.Any(x => x.NIF == request.NIF))
-                throw new AppException("NIF '" + request.NIF + "' is already registered");
-
             if (IsValidEmail(request.Email) == false)
                 throw new AppException("Email '" + request.Email + "' is not valid");
 

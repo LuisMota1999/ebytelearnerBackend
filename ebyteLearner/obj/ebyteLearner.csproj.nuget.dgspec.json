@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj": {}
+    "C:\\Users\\luisp\\source\\repos\\ebytelearnerBackend\\ebyteLearner\\ebyteLearner.csproj": {}
   },
   "projects": {
-    "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj": {
+    "C:\\Users\\luisp\\source\\repos\\ebytelearnerBackend\\ebyteLearner\\ebyteLearner.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
+        "projectUniqueName": "C:\\Users\\luisp\\source\\repos\\ebytelearnerBackend\\ebyteLearner\\ebyteLearner.csproj",
         "projectName": "ebyteLearner",
-        "projectPath": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
-        "packagesPath": "C:\\Users\\LPMOTA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\obj\\",
+        "projectPath": "C:\\Users\\luisp\\source\\repos\\ebytelearnerBackend\\ebyteLearner\\ebyteLearner.csproj",
+        "packagesPath": "C:\\Users\\luisp\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\luisp\\source\\repos\\ebytelearnerBackend\\ebyteLearner\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-          "C:\\Program Files (x86)\\Microsoft\\Xamarin\\NuGet\\"
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
         ],
         "configFilePaths": [
-          "C:\\Users\\LPMOTA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\luisp\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
@@ -168,24 +166,6 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "Microsoft.AspNetCore.App.Ref",
-              "version": "[7.0.16, 7.0.16]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Host.win-x64",
-              "version": "[7.0.16, 7.0.16]"
-            },
-            {
-              "name": "Microsoft.NETCore.App.Ref",
-              "version": "[7.0.16, 7.0.16]"
-            },
-            {
-              "name": "Microsoft.WindowsDesktop.App.Ref",
-              "version": "[7.0.16, 7.0.16]"
-            }
-          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -194,7 +174,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.102\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
         }
       }
     }

@@ -64,18 +64,18 @@ namespace ebyteLearner.Migrations
                     b.Property<float>("CoursePrice")
                         .HasColumnType("float");
 
+                    b.Property<Guid>("CourseTeacherID")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("TeacherID")
-                        .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("TeacherID");
+                    b.HasIndex("CourseTeacherID");
 
                     b.ToTable("Course");
                 });
@@ -290,7 +290,6 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<string>("NIF")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("Nationality")
@@ -363,7 +362,7 @@ namespace ebyteLearner.Migrations
                 {
                     b.HasOne("ebyteLearner.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("TeacherID")
+                        .HasForeignKey("CourseTeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

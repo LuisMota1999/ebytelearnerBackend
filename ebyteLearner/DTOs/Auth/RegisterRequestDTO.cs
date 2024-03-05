@@ -9,8 +9,6 @@ namespace ebyteLearner.DTOs.Auth
         [Required]
         public string Email { get; set; }
         [Required]
-        public string NIF { get; set; }
-        [Required]
         public string Password { get; set; }
     }
 }

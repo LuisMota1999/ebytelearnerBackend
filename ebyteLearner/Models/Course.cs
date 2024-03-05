@@ -12,10 +12,10 @@ namespace ebyteLearner.Models
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public float CoursePrice { get; set; }
-        public Guid TeacherID { get; set; }
-
-        [ForeignKey("TeacherID")]
+       
+        [ForeignKey("CourseTeacherID")]
         public User User { get; set; }
+        public Guid CourseTeacherID { get; set; }
         public List<Module> Modules { get; set; }
         public List<User> Users { get; set; }
         public DateTimeOffset CreatedDate { get; init; }
