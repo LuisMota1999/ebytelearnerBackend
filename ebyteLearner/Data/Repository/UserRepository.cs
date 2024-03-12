@@ -13,6 +13,7 @@ namespace ebyteLearner.Data.Repository
         Task<UserDTO> Read(Guid id);
         IQueryable<UserDTO> ReadAllUsers();
         IQueryable<UserDTO> SearchUsers(string searchQuery);
+        IQueryable<UserDTO> GetActiveTeacherUsers();
         Task Delete(Guid id);
     }
 
@@ -86,6 +87,13 @@ namespace ebyteLearner.Data.Repository
 
             return _dbContext.User
                 .Where(u => EF.Functions.Like(u.Username, $"%{searchQuery}%"))
+                .Select(u => _mapper.Map<UserDTO>(u));
+        }
+
+        public IQueryable<UserDTO> GetActiveTeacherUsers()
+        {
+            return _dbContext.User
+                .Where(u => u.UserRole == UserRole.Teacher)
                 .Select(u => _mapper.Map<UserDTO>(u));
         }
 

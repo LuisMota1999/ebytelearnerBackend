@@ -14,6 +14,7 @@ namespace ebyteLearner.Services
         Task<IEnumerable<UserDTO>> SearchUser(string searchQuery, int page = 1, int pageSize = 10);
         Task<UserDTO> UpdateUser(Guid Id, UpdateUserRequestDTO request);
         Task<IEnumerable<UserDTO>> GetAllUsers();
+        Task<IEnumerable<UserDTO>> GetActiveTeacherUsers();
         Task<UserDTO> GetUser(Guid id);
         Task DeleteUser(Guid id);
     }
@@ -62,7 +63,10 @@ namespace ebyteLearner.Services
             await _userRepository.Delete(id);
         }
 
-        
+        public async Task<IEnumerable<UserDTO>> GetActiveTeacherUsers()
+        {
+            return await _userRepository.GetActiveTeacherUsers().ToListAsync();
+        }
 
     }
 

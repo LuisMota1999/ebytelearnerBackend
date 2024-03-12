@@ -28,6 +28,13 @@ namespace ebyteLearner.Controllers
             return Ok(response);
         }
 
+        [HttpGet("GetTeachers")]
+        public IActionResult GetAllTeachers()
+        {
+            var response = _userService.GetActiveTeacherUsers().Result;
+            return Ok(response);
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetUser([FromRoute] Guid id)
         {
