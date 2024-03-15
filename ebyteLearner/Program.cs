@@ -14,6 +14,8 @@ using ebyteLearner.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Configuration.AddUserSecrets<Program>();
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowOrigin", builder =>
@@ -127,6 +129,7 @@ builder.Services.AddScoped<IPDFService, PDFService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
+builder.Services.AddScoped<IDriveServiceHelper, DriveServiceHelper>();
 
 //Utils
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
