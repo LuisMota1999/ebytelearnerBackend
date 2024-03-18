@@ -18,15 +18,7 @@ namespace ebyteLearner.Controllers
         public AuthController(ILogger<AuthController> logger, IAuthService authService)
         {
             _logger = logger;
-            _authService = authService ?? throw new ArgumentNullException(nameof(authService));
-            
-        }
-
-        [AllowAnonymous]
-        [HttpGet("Teste")]
-        public IActionResult Teste()
-        {
-            return Ok(new { message = "Teste" });
+            _authService = authService ?? throw new ArgumentNullException(nameof(authService));        
         }
 
         [AllowAnonymous]

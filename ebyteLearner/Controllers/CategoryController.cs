@@ -2,6 +2,7 @@
 using ebyteLearner.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.Controllers
 {
@@ -20,7 +21,7 @@ namespace ebyteLearner.Controllers
         }
 
         [HttpGet("All")]
-        public async Task<IActionResult> GetAllCourses([FromQuery] int returnRows = 0)
+        public async Task<IActionResult> GetAllCategories([FromQuery] int returnRows = 0)
         {
             var response = await _categoryService.GetAllCategories(returnRows);
 
@@ -33,7 +34,7 @@ namespace ebyteLearner.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetCourse([FromRoute] Guid id)
+        public IActionResult GetCategory([FromRoute] Guid id)
         {
 
             var response = _categoryService.GetCategory(id).Result;
@@ -42,26 +43,45 @@ namespace ebyteLearner.Controllers
         }
 
         [HttpPut("Update/{id}")]
-        public IActionResult UpdateCourse([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDTO request)
+        public IActionResult UpdateCategory([FromRoute] Guid id, [FromBody] UpdateCategoryRequestDTO request)
         {
             _categoryService.UpdateCategory(id, request);
             return Ok($"Category {id} updated with success");
         }
 
         [HttpPost("Delete/{id}")]
-        public IActionResult RemoveCourse([FromRoute] Guid id, [FromBody] Guid courseID)
+        public IActionResult DeleteCategory([FromRoute] Guid id, [FromBody] Guid courseID)
         {
             _categoryService.DeleteCategory(courseID);
             return Ok($"Category {id} deleted with success");
 
         }
 
-        [HttpPost("Create")]
-        public IActionResult CreateCourse([FromBody] CreateCategoryRequestDTO request)
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDTO request)
         {
-            _categoryService.CreateCategory(request);
-            return Ok($"Category {request.CategoryName} created with success");
+            try
+            {
+                var rowsAffected = await _categoryService.CreateCategory(request);
 
+                if (rowsAffected > 0)
+                {
+                    return Ok($"Category named ${request.CategoryName} with success!");
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError, "Failed to create category");
+                }
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred");
+            }
         }
     }
 }   

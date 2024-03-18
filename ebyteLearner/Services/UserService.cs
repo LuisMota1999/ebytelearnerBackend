@@ -1,9 +1,7 @@
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.User;
-using ebyteLearner.Helpers;
 using ebyteLearner.Models;
 
 namespace ebyteLearner.Services
@@ -12,7 +10,7 @@ namespace ebyteLearner.Services
     public interface IUserService
     {
         Task<IEnumerable<UserDTO>> SearchUser(string searchQuery, int page = 1, int pageSize = 10);
-        Task<UserDTO> UpdateUser(Guid Id, UpdateUserRequestDTO request);
+        void UpdateUser(Guid Id, UpdateUserRequestDTO request);
         Task<IEnumerable<UserDTO>> GetAllUsers();
         Task<IEnumerable<UserDTO>> GetActiveTeacherUsers();
         Task<UserDTO> GetUser(Guid id);
@@ -30,12 +28,12 @@ namespace ebyteLearner.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<UserDTO> UpdateUser(Guid Id, UpdateUserRequestDTO request)
+        public void UpdateUser(Guid Id, UpdateUserRequestDTO request)
         {
 
-            var updatedUser = await _userRepository.Update(Id, request);
+            _userRepository.Update(Id, request);
 
-            return updatedUser;
+
         }
 
         public async Task<IEnumerable<UserDTO>> SearchUser(string searchQuery, int page = 1, int pageSize = 10)

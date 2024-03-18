@@ -3,12 +3,14 @@ using ebyteLearner.DTOs.Category;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.Data.Repository
 {
     public interface ICategoryRepository
     {
-        Task Create(CreateCategoryRequestDTO request);
+        Task<int> Create(CreateCategoryRequestDTO request);
         Task Delete(Guid id);
         Task<CategoryDTO> Update(Guid id, UpdateCategoryRequestDTO request);
         Task<CategoryDTO> Read(Guid id);
@@ -41,17 +43,40 @@ namespace ebyteLearner.Data.Repository
             return categoryDTO;
         }
 
-        public async Task Create(CreateCategoryRequestDTO request)
+        public async Task<int> Create(CreateCategoryRequestDTO request)
         {
+            if (request.CategoryName.IsNullOrEmpty())
+                throw new AppException($"Category name can not be empty");
+            
+
             if (_dbContext.Category.Any(x => x.CategoryName.Equals(request.CategoryName)))
                 throw new AppException("Category '" + request.CategoryName + "' is already registered");
+            
 
+            // Map DTO to entity
             var category = _mapper.Map<Category>(request);
 
+            // Add category to DbContext
             _dbContext.Category.Add(category);
 
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                // Save changes asynchronously
+                var rowsAffected = await _dbContext.SaveChangesAsync();
+
+                // Log successful creation
+                _logger.LogInformation($"Created category with ID: {category.Id}");
+
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating category");
+
+                throw;
+            }
         }
+
         public async Task<CategoryDTO> Update(Guid id, UpdateCategoryRequestDTO request)
         {
             var categoryDB = await _dbContext.Category.FindAsync(id);

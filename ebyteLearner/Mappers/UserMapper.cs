@@ -3,6 +3,7 @@ using ebyteLearner.DTOs.Auth;
 using ebyteLearner.DTOs.Course;
 using ebyteLearner.DTOs.Module;
 using ebyteLearner.DTOs.PDF;
+using ebyteLearner.DTOs.User;
 using ebyteLearner.Models;
 
 namespace ebyteLearner.Mappers
@@ -11,11 +12,9 @@ namespace ebyteLearner.Mappers
     {
         public UserMapper()
         {
-            // User -> UserDTO
-            CreateMap<User, UserDTO>();
-
-            // UserDTO -> User
-            CreateMap<UserDTO, User>();
+            CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UpdateUserRequestDTO>().ReverseMap();
+            CreateMap<UserDTO, UpdateUserRequestDTO>().ReverseMap();
         }
     }
 }

@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.User;
 using ebyteLearner.Models;
 using ebyteLearner.Services;
 
 namespace ebyteLearner.Controllers
 {
-    [Authorize(Roles = "Admin, Student")]
+    [Authorize(Roles = "Admin, Teacher")]
     [ApiController]
     [Route("[controller]")]
     public class UserController : ControllerBase
@@ -28,6 +27,7 @@ namespace ebyteLearner.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin, Teacher, Student")]
         [HttpGet("GetTeachers")]
         public IActionResult GetAllTeachers()
         {
@@ -51,11 +51,12 @@ namespace ebyteLearner.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin, Teacher, Student")]
         [HttpPut("Update/{id}")]
         public IActionResult UpdateUser([FromRoute] Guid id, [FromBody] UpdateUserRequestDTO request)
         {
-            var response = _userService.UpdateUser(id, request);
-            return Ok(response);
+            _userService.UpdateUser(id, request);
+            return Ok($"User {id} updated with success");
 
         }
 

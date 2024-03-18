@@ -2,14 +2,14 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ebyteLearner.DTOs.User;
 using ebyteLearner.Helpers;
-using ebyteLearner.Interfaces;
 using ebyteLearner.Models;
+using ebyteLearner.DTOs.Course;
 
 namespace ebyteLearner.Data.Repository
 {
     public interface IUserRepository
     {
-        Task<UserDTO> Update(Guid id, UpdateUserRequestDTO request);
+        Task Update(Guid id, UpdateUserRequestDTO request);
         Task<UserDTO> Read(Guid id);
         IQueryable<UserDTO> ReadAllUsers();
         IQueryable<UserDTO> SearchUsers(string searchQuery);
@@ -29,15 +29,27 @@ namespace ebyteLearner.Data.Repository
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<UserDTO> Update(Guid id, UpdateUserRequestDTO request)
+        public async Task Update(Guid id, UpdateUserRequestDTO request)
         {
             var userDB = await _dbContext.User.FindAsync(id);
             if (userDB != null)
             {
                 _mapper.Map(request, userDB);
-                await _dbContext.SaveChangesAsync();
-                var updatedUserResponse = _mapper.Map<UserDTO>(userDB);
-                return updatedUserResponse;
+                _dbContext.Entry(userDB).State = EntityState.Modified;
+                
+                try
+                {
+                    await _dbContext.SaveChangesAsync();
+                    
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    throw new AppException("Concurrency conflict occurred while updating the user.", ex);
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new AppException("Error occurred while updating the user in the database.", ex);
+                }
             }
             else
             {

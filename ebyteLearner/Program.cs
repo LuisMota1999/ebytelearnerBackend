@@ -114,6 +114,7 @@ builder.Services.AddSwaggerGen();
 //Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IModuleRepository, ModuleRepository>();
 builder.Services.AddScoped<IPDFRepository, PDFRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
@@ -124,12 +125,14 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IWebSocketService, WebSocketService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IPDFService, PDFService>();
 builder.Services.AddScoped<IQuestionService, QuestionService>();
 builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<IDriveServiceHelper, DriveServiceHelper>();
+
 
 //Utils
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
@@ -143,7 +146,7 @@ var mapperConfig = new MapperConfiguration(mc =>
     mc.AddProfile(new PdfMapper());
     mc.AddProfile(new QuestionMapper());
     mc.AddProfile(new SessionMapper());
-    
+    mc.AddProfile(new CategoryMapper());
 });
 
 

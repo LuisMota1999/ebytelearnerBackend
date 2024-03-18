@@ -9,7 +9,7 @@ namespace ebyteLearner.Services
     {
         Task<IEnumerable<CategoryDTO>> GetAllCategories(int returnRows = 10);
         Task<CategoryDTO> GetCategory(Guid id);
-        Task CreateCategory(CreateCategoryRequestDTO request);
+        Task<int> CreateCategory(CreateCategoryRequestDTO request);
         Task<CategoryDTO> UpdateCategory(Guid id, UpdateCategoryRequestDTO request);
         Task DeleteCategory(Guid id);
     }
@@ -31,9 +31,9 @@ namespace ebyteLearner.Services
 
         public async Task<CategoryDTO> GetCategory(Guid id)
         {
-            var cachedCourse = _cacheService.GetData<CategoryDTO>(id.ToString());
-            if (cachedCourse != null)
-                return cachedCourse;
+            var cachedCategory = _cacheService.GetData<CategoryDTO>(id.ToString());
+            if (cachedCategory != null)
+                return cachedCategory;
 
             var expiryTime = DateTimeOffset.Now.AddMinutes(60);
 
@@ -43,10 +43,13 @@ namespace ebyteLearner.Services
             return response;
         }
 
-        public async Task CreateCategory(CreateCategoryRequestDTO request)
+        public async Task<int> CreateCategory(CreateCategoryRequestDTO request)
         {
-            _cacheService.RemoveData("GetAllCategories");
-            await _categoryRepository.Create(request);
+            var cachedCategory = _cacheService.GetData<CategoryDTO>("GetAllCategories");
+            if (cachedCategory != null)
+                _cacheService.RemoveData("GetAllCategories");
+            
+            return await _categoryRepository.Create(request);
         }
 
         public async Task<CategoryDTO> UpdateCategory(Guid id, UpdateCategoryRequestDTO request)
@@ -66,15 +69,15 @@ namespace ebyteLearner.Services
 
         public async Task<IEnumerable<CategoryDTO>> GetAllCategories(int returnRows = 10)
         {
-            var cachedCourses = _cacheService.GetData<IEnumerable<CategoryDTO>>("GetAllCategories");
-            if (cachedCourses != null)
-                return cachedCourses.TakeLast(returnRows);
+            var cachedCategories = _cacheService.GetData<IEnumerable<CategoryDTO>>("GetAllCategories");
+            if (cachedCategories != null)
+                return cachedCategories.TakeLast(returnRows);
 
             var expiryTime = DateTimeOffset.Now.AddMinutes(5);
 
             var response = await _categoryRepository.ReadAllCategories();
 
-            _cacheService.SetData<IEnumerable<CategoryDTO>>("GetAllCourses", response, expiryTime);
+            _cacheService.SetData<IEnumerable<CategoryDTO>>("GetAllCategories", response, expiryTime);
 
             if (returnRows > 0)
             {

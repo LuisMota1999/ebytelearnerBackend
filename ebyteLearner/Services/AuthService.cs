@@ -90,7 +90,7 @@ namespace ebyteLearner.Services
                 }
                 else
                 {
-                    throw new AppException("User not found");
+                    throw new AppException($"User with NIF {user.NIF} not found");
                 }
             }
             catch (Exception ex)

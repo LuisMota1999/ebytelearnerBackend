@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\ebyteLearner",
-    "\\ebyteLearner\\Services"
+    ""
   ],
-  "SelectedNode": "\\ebyteLearner\\Services\\GoogleDriveService.cs",
+  "SelectedNode": "\\ebyteLearner.sln",
   "PreviewInSolutionExplorer": false
 }
