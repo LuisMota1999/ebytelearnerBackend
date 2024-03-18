@@ -57,7 +57,7 @@ namespace ebyteLearner.Data.Repository
 
         public async Task Create(CreateCourseRequestDTO request)
         {
-            if (_dbContext.Course.Any(x => x.CourseName == request.CourseName))
+            if (_dbContext.Course.Any(x => x.CourseName.Equals(request.CourseName)))
                 throw new AppException("Course '" + request.CourseName + "' is already registered");
 
             var course = _mapper.Map<Course>(request);

@@ -13,6 +13,7 @@ public class DBContextService : DbContext
     public DbSet<Session> Session { get; set; }
     public DbSet<SessionMonitoring> SessionMonitoring { get; set; }
     public DbSet<UserSession> UserSession { get; set; }
+    public DbSet<Category> Category { get; set; }
     public DBContextService(DbContextOptions<DBContextService> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -11,6 +11,7 @@ namespace ebyteLearner.DTOs.Course
         public float CoursePrice { get; set; }
         [Required]
         public Guid CourseTeacherID { get; set; }
+        public bool? IsPublished { get; set; } = false;
         public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.Now;
     }
 }

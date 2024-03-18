@@ -12,9 +12,8 @@ namespace ebyteLearner.Models
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public float CoursePrice { get; set; }
-        public bool IsPublished { get; set; }
-        public string CourseImageURL { get; set; }
-
+        public bool IsPublished { get; set; } = false;
+        public string? CourseImageURL { get; set; }
         [ForeignKey("CourseTeacherID")]
         public User User { get; set; }
         public Guid CourseTeacherID { get; set; }

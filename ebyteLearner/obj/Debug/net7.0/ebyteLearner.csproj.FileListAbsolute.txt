@@ -218,3 +218,10 @@ C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Google.A
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Google.Protobuf.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\System.Management.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\Google.Apis.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\Google.Apis.Auth.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\Google.Apis.Core.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\Google.Apis.Drive.v3.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\Google.Protobuf.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\System.Management.dll
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll

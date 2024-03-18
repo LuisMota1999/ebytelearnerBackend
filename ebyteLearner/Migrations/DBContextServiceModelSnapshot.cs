@@ -47,14 +47,35 @@ namespace ebyteLearner.Migrations
                     b.ToTable("Answer");
                 });
 
+            modelBuilder.Entity("ebyteLearner.Models.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Category");
+                });
+
             modelBuilder.Entity("ebyteLearner.Models.Course", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
+                    b.Property<Guid>("CategoryID")
+                        .HasColumnType("char(36)");
+
                     b.Property<string>("CourseDescription")
                         .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CourseImageURL")
                         .HasColumnType("longtext");
 
                     b.Property<string>("CourseName")
@@ -70,10 +91,15 @@ namespace ebyteLearner.Migrations
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<bool>("IsPublished")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryID");
 
                     b.HasIndex("CourseTeacherID");
 
@@ -360,11 +386,19 @@ namespace ebyteLearner.Migrations
 
             modelBuilder.Entity("ebyteLearner.Models.Course", b =>
                 {
+                    b.HasOne("ebyteLearner.Models.Category", "Category")
+                        .WithMany("Courses")
+                        .HasForeignKey("CategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ebyteLearner.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("CourseTeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Category");
 
                     b.Navigation("User");
                 });
@@ -451,6 +485,11 @@ namespace ebyteLearner.Migrations
                     b.Navigation("Session");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ebyteLearner.Models.Category", b =>
+                {
+                    b.Navigation("Courses");
                 });
 
             modelBuilder.Entity("ebyteLearner.Models.Course", b =>
