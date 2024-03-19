@@ -7,7 +7,6 @@ namespace ebyteLearner.Models
         [Key]
         public Guid Id { get; init; }
         public string CategoryName { get; set; }
-        public Course[]? Courses { get; set; } = null;
 
     }
 }

@@ -45,8 +45,8 @@ namespace ebyteLearner.Services
 
         public async Task<int> CreateCategory(CreateCategoryRequestDTO request)
         {
-            var cachedCategory = _cacheService.GetData<CategoryDTO>("GetAllCategories");
-            if (cachedCategory != null)
+            var cachedCategories = _cacheService.GetData<IEnumerable<CategoryDTO>>("GetAllCategories");
+            if (cachedCategories != null)
                 _cacheService.RemoveData("GetAllCategories");
             
             return await _categoryRepository.Create(request);

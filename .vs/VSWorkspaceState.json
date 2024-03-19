@@ -1,7 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\ebyteLearner",
+    "\\ebyteLearner\\Models"
   ],
-  "SelectedNode": "\\ebyteLearner.sln",
+  "SelectedNode": "\\ebyteLearner\\Models\\Category.cs",
   "PreviewInSolutionExplorer": false
 }

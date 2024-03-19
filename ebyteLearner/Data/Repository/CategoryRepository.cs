@@ -47,11 +47,9 @@ namespace ebyteLearner.Data.Repository
         {
             if (request.CategoryName.IsNullOrEmpty())
                 throw new AppException($"Category name can not be empty");
-            
 
             if (_dbContext.Category.Any(x => x.CategoryName.Equals(request.CategoryName)))
                 throw new AppException("Category '" + request.CategoryName + "' is already registered");
-            
 
             // Map DTO to entity
             var category = _mapper.Map<Category>(request);
@@ -65,7 +63,7 @@ namespace ebyteLearner.Data.Repository
                 var rowsAffected = await _dbContext.SaveChangesAsync();
 
                 // Log successful creation
-                _logger.LogInformation($"Created category with ID: {category.Id}");
+                _logger.LogInformation($"Created category with ID: {category.Id}, rows affected: {rowsAffected}");
 
                 return rowsAffected;
             }
@@ -76,6 +74,7 @@ namespace ebyteLearner.Data.Repository
                 throw;
             }
         }
+
 
         public async Task<CategoryDTO> Update(Guid id, UpdateCategoryRequestDTO request)
         {

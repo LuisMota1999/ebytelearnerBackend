@@ -62,7 +62,7 @@ namespace ebyteLearner.Controllers
         {
             try
             {
-                var rowsAffected = await _categoryService.CreateCategory(request);
+                int rowsAffected = await _categoryService.CreateCategory(request);
 
                 if (rowsAffected > 0)
                 {
@@ -80,7 +80,7 @@ namespace ebyteLearner.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return StatusCode(StatusCodes.Status500InternalServerError, "An unexpected error occurred");
+                return StatusCode(StatusCodes.Status500InternalServerError, $"An unexpected error occurred {ex.Message}");
             }
         }
     }

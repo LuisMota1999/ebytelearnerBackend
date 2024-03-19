@@ -46,7 +46,10 @@ namespace ebyteLearner.Services
 
         public async Task CreateCourse(CreateCourseRequestDTO request)
         {
-            _cacheService.RemoveData("GetAllCourses");
+            var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
+            if (cachedCourses != null)
+                _cacheService.RemoveData("GetAllCourses");
+
             await _courseRepository.Create(request);
         }
 
