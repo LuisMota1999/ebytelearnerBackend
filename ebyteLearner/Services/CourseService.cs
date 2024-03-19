@@ -9,10 +9,10 @@ namespace ebyteLearner.Services
     {
         Task<IEnumerable<CourseDTO>> GetAllCourses(int returnRows = 0);
         Task<CourseDTO> GetCourse(Guid id);
-        Task CreateCourse(CreateCourseRequestDTO request);
+        Task<int> CreateCourse(CreateCourseRequestDTO request);
         Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request);
         Task DeleteCourse(Guid id);
-        Task AssocModuleToCourse(AssociateModuleRequest associateModuleRequest);
+        Task<int> AssocModuleToCourse(AssociateModuleRequest associateModuleRequest);
     }
 
     public class CourseService : ICourseService
@@ -44,13 +44,13 @@ namespace ebyteLearner.Services
             return response;
         }
 
-        public async Task CreateCourse(CreateCourseRequestDTO request)
+        public async Task<int> CreateCourse(CreateCourseRequestDTO request)
         {
             var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
             if (cachedCourses != null)
                 _cacheService.RemoveData("GetAllCourses");
 
-            await _courseRepository.Create(request);
+            return await _courseRepository.Create(request);
         }
 
         public async Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
@@ -88,21 +88,9 @@ namespace ebyteLearner.Services
             return response;
         }
 
-        public async Task AssocModuleToCourse(AssociateModuleRequest associateModuleRequest)
+        public async Task<int> AssocModuleToCourse(AssociateModuleRequest associateModuleRequest)
         {
-            var course = await _courseRepository.Read(associateModuleRequest.CourseID);
-
-            if (course == null)
-            {
-                throw new AppException($"Course '{associateModuleRequest.CourseID}' not found");
-            }
-
-            if (course.Modules.Any(m => m.Id == associateModuleRequest.ModuleID))
-            {
-                throw new AppException($"Module '{associateModuleRequest.ModuleID}' is already associated with the course");
-            }
-
-            await _courseRepository.AssociateModuleToCourse(associateModuleRequest.CourseID, associateModuleRequest.ModuleID);
+            return await _courseRepository.AssociateModuleToCourse(associateModuleRequest.CourseID, associateModuleRequest.ModuleID);
         }
 
     }

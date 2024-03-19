@@ -78,6 +78,16 @@ namespace ebyteLearner.Data.Repository
 
         public async Task<CategoryDTO> Update(Guid id, UpdateCategoryRequestDTO request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            if (string.IsNullOrEmpty(request.CategoryName))
+            {
+                throw new ValidationException("Category name cannot be empty.");
+            }
+
             var categoryDB = await _dbContext.Category.FindAsync(id);
             if (categoryDB != null)
             {
@@ -109,6 +119,7 @@ namespace ebyteLearner.Data.Repository
             var categoryDB = await _dbContext.Category.FindAsync(id);
             if (categoryDB != null)
             {
+                _dbContext.Entry(categoryDB).State = EntityState.Deleted;
                 _dbContext.Remove(categoryDB);
                 await _dbContext.SaveChangesAsync();
             }

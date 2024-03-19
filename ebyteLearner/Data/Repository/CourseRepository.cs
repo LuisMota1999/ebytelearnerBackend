@@ -4,6 +4,7 @@ using ebyteLearner.DTOs.Course;
 using ebyteLearner.DTOs.Module;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
+using Microsoft.IdentityModel.Tokens;
 
 
 namespace ebyteLearner.Data.Repository
@@ -14,8 +15,8 @@ namespace ebyteLearner.Data.Repository
         Task<CourseDTO> Read(Guid id);
         Task<IEnumerable<CourseDTO>> ReadAllCourses();
         Task Delete(Guid id);
-        Task Create(CreateCourseRequestDTO request);
-        Task AssociateModuleToCourse(Guid courseId, Guid moduleId);
+        Task<int> Create(CreateCourseRequestDTO request);
+        Task<int> AssociateModuleToCourse(Guid courseId, Guid moduleId);
     }
 
     public class CourseRepository : ICourseRepository
@@ -28,6 +29,36 @@ namespace ebyteLearner.Data.Repository
             _dbContext = dbContext;
             _logger = logger;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        }
+
+        public async Task<int> Create(CreateCourseRequestDTO request)
+        {
+            if (request.CourseName.IsNullOrEmpty())
+                throw new AppException($"Course name can not be empty");
+
+            if (_dbContext.Course.Any(x => x.CourseName.Equals(request.CourseName)))
+                throw new AppException("Course '" + request.CourseName + "' is already registered");
+
+            var course = _mapper.Map<Course>(request);
+
+            _dbContext.Course.Add(course);
+
+            try
+            {
+                // Save changes asynchronously
+                var rowsAffected = await _dbContext.SaveChangesAsync();
+
+                // Log successful creation
+                _logger.LogInformation($"Created course with ID: {course.Id}, rows affected: {rowsAffected}");
+
+                return rowsAffected;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while creating course");
+
+                throw;
+            }
         }
 
         public async Task<CourseDTO> Read(Guid id)
@@ -49,29 +80,23 @@ namespace ebyteLearner.Data.Repository
 
             if (courseWithModules == null)
             {
+                _logger.LogWarning($"Course with ID: {id} not found!");
                 throw new AppException($"Course '{id}' not found");
             }
 
             return courseWithModules;
         }
 
-        public async Task Create(CreateCourseRequestDTO request)
-        {
-            if (_dbContext.Course.Any(x => x.CourseName.Equals(request.CourseName)))
-                throw new AppException("Course '" + request.CourseName + "' is already registered");
-
-            var course = _mapper.Map<Course>(request);
-
-            _dbContext.Course.Add(course);
-
-            await _dbContext.SaveChangesAsync();
-        }
         public async Task<CourseDTO> Update(Guid id, UpdateCourseRequestDTO request)
         {
-            var courseDB = _dbContext.Course.Find(id);
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var courseDB = await _dbContext.Course.FindAsync(id);
             if (courseDB != null)
             {
-                // Update only if there are changes
                 _mapper.Map(request, courseDB);
                 _dbContext.Entry(courseDB).State = EntityState.Modified;
 
@@ -104,8 +129,9 @@ namespace ebyteLearner.Data.Repository
             var course = await _dbContext.Course.FindAsync(id);
             if (course != null)
             {
-               _dbContext.Remove(course);
-               await _dbContext.SaveChangesAsync();
+                _dbContext.Entry(course).State = EntityState.Deleted;
+                _dbContext.Remove(course);
+                await _dbContext.SaveChangesAsync();
             }
             else
                 throw new AppException("Course '" + id + "' not found");
@@ -116,9 +142,9 @@ namespace ebyteLearner.Data.Repository
                 .Include(course => course.Modules)
                 .ToListAsync();
 
-            if (coursesWithModules == null || !coursesWithModules.Any())
+            if (!coursesWithModules.Any())
             {
-                return null;
+                return Enumerable.Empty<CourseDTO>();
             }
 
             var courseDTOs = coursesWithModules.Select(course => new CourseDTO
@@ -137,18 +163,39 @@ namespace ebyteLearner.Data.Repository
             return courseDTOs;
         }
 
-        public async Task AssociateModuleToCourse(Guid courseId, Guid moduleId)
+        public async Task<int> AssociateModuleToCourse(Guid courseId, Guid moduleId)
         {
-            var module = new Module
+            var course = await _dbContext.Course.Include(c => c.Modules).FirstOrDefaultAsync(c => c.Id == courseId);
+            if (course == null)
             {
-                Id = moduleId,
-                CourseId = courseId
-            };
+                throw new AppException($"Course '{courseId}' not found");
+            }
 
-            _dbContext.Attach(module);
-            _dbContext.Entry(module).Property(m => m.CourseId).IsModified = true;
+            var module = await _dbContext.Module.FindAsync(moduleId);
+            if (module == null)
+            {
+                throw new AppException($"Module '{moduleId}' not found");
+            }
 
-            await _dbContext.SaveChangesAsync();
+            // Check if the module is already associated with the course
+            if (course.Modules.Any(m => m.Id == moduleId))
+            {
+                throw new AppException($"Module '{moduleId}' is already associated with the course '{courseId}'");
+            }
+
+            // Associate the module with the course
+            course.Modules.Add(module);
+
+            try
+            {
+                return await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                // Log the exception and return an appropriate response
+                throw new AppException("Error occurred while associating the module with the course in the database.", ex);
+            }
         }
+
     }
 }

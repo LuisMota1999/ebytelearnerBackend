@@ -11,6 +11,7 @@ using Microsoft.OpenApi.Models;
 using System.Text;
 using ebyteLearner.Interfaces;
 using ebyteLearner.Mappers;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -88,6 +89,9 @@ builder.Services.AddSwaggerGen(c =>
                         new string[] { }
                     }
                 });
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 
