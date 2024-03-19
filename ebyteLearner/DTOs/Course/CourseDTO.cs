@@ -1,4 +1,6 @@
-﻿using ebyteLearner.DTOs.Module;
+﻿using ebyteLearner.DTOs.Category;
+using ebyteLearner.DTOs.Module;
+using ebyteLearner.Models;
 
 namespace ebyteLearner.DTOs.Course
 {
@@ -8,6 +10,10 @@ namespace ebyteLearner.DTOs.Course
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public float CoursePrice { get; set; }
-        public List<ModuleDTO> Modules { get; set; }
+        public CategoryDTO CourseCategory { get; set; }
+        public List<ModuleDTO> CourseModules { get; set; }
+        public UserDTO CourseTeacher { get; set; }
+        public bool? IsPublished { get; set; }
+       
     }
 }

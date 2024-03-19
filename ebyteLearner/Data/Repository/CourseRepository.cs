@@ -33,6 +33,13 @@ namespace ebyteLearner.Data.Repository
 
         public async Task<int> Create(CreateCourseRequestDTO request)
         {
+           
+            if (_dbContext.Category.Find(request.CategoryId) == null)
+                throw new AppException("Category '" + request.CategoryId + "' not found");
+            
+            if (_dbContext.User.Find(request.CourseTeacherID) == null)
+                throw new AppException("Teacher '" + request.CategoryId + "' not found");
+
             if (request.CourseName.IsNullOrEmpty())
                 throw new AppException($"Course name can not be empty");
 
@@ -70,7 +77,7 @@ namespace ebyteLearner.Data.Repository
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
-                    Modules = course.Modules.Select(module => new ModuleDTO
+                    CourseModules = course.Modules.Select(module => new ModuleDTO
                     {
                         Id = module.Id,
                         ModuleName = module.ModuleName
@@ -153,7 +160,7 @@ namespace ebyteLearner.Data.Repository
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
                 CoursePrice = course.CoursePrice,
-                Modules = course.Modules.Select(module => new ModuleDTO
+                CourseModules = course.Modules.Select(module => new ModuleDTO
                 {
                     Id = module.Id,
                     ModuleName = module.ModuleName,
