@@ -7,7 +7,7 @@ namespace ebyteLearner.Services
     public interface IQuestionService
     {
         Task<QuestionDTO> GetQuestion(Guid id);
-        Task<QuestionDTO> CreateQuestion(CreateQuestionRequestDTO request);
+        Task<int> CreateQuestion(CreateQuestionRequestDTO request);
         Task<QuestionDTO> UpdateQuestion(Guid id, UpdateQuestionRequestDTO request);
         Task DeleteQuestion(Guid id);
     }
@@ -27,7 +27,7 @@ namespace ebyteLearner.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<QuestionDTO> CreateQuestion(CreateQuestionRequestDTO request)
+        public async Task<int> CreateQuestion(CreateQuestionRequestDTO request)
         {          
             return await _questionRepository.Create(request);
         }

@@ -9,7 +9,9 @@ namespace ebyteLearner.DTOs.Module
         public string SessionName { get; set; }
         public string SessionDescription { get; set; }
         [Required]
-        public Guid ModuleID { get; set; }
+        public Guid SessionPdfId { get; set; }
+        [Required]
+        public Guid SessionModuleID { get; set; }
         [Required]
         public DateTimeOffset StartSessionDate { get; set; } = DateTimeOffset.UtcNow;
         [Required]

@@ -227,3 +227,5 @@ C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\Sy
 C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\runtimes\win\lib\net7.0\System.Management.dll
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\ebyteLearner.xml
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\ebyteLearner.xml
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\ebyteLearner.xml
+C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\obj\Debug\net7.0\ebyteLearner.xml

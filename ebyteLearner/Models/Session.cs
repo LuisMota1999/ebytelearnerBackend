@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
-using Newtonsoft.Json;
 
 namespace ebyteLearner.Models
 {
@@ -16,13 +13,14 @@ namespace ebyteLearner.Models
         public byte[] QRCode { get; set; }
         public ICollection<UserSession> UserSessions { get; set; }
 
-        [ForeignKey("PdfDocumentID")]
-        public Pdf PdfDocument { get; set; }
-        public Guid ModuleID { get; set; }
+        [ForeignKey("SessionPdfId")]
+        public Pdf SessionPdf { get; set; }
+        public Guid? SessionPdfId{ get; set; }
+        public Guid SessionModuleID { get; set; }
 
         [ForeignKey("SessionMonitoringID")]
-        public SessionMonitoring SessionMonitoring { get; set; }
-        public Guid SessionMonitoringID { get; set; }
+        public SessionMonitoring? SessionMonitoring { get; set; }
+        public Guid? SessionMonitoringID { get; set; }
         public DateTimeOffset StartSessionDate { get; set; }
         public DateTimeOffset EndSessionDate { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;

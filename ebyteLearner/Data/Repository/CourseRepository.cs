@@ -5,7 +5,7 @@ using ebyteLearner.DTOs.Module;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
 using Microsoft.IdentityModel.Tokens;
-
+using ebyteLearner.DTOs.Category;
 
 namespace ebyteLearner.Data.Repository
 {
@@ -77,7 +77,18 @@ namespace ebyteLearner.Data.Repository
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
-                    CourseModules = course.Modules.Select(module => new ModuleDTO
+                    CourseCategory = new CategoryDTO
+                    {
+                        Id = course.CourseCategory.Id,
+                        CategoryName = course.CourseCategory.CategoryName,
+                    },
+                    CourseTeacher = new UserDTO
+                    {
+                        Id = course.CourseTeacher.Id,
+                        Username = course.CourseTeacher.Username,
+                        Email = course.CourseTeacher.Email,
+                    },
+                    CourseModules = course.CourseModules.Select(module => new ModuleDTO
                     {
                         Id = module.Id,
                         ModuleName = module.ModuleName
@@ -146,7 +157,9 @@ namespace ebyteLearner.Data.Repository
         public async Task<IEnumerable<CourseDTO>> ReadAllCourses()
         {
             var coursesWithModules = await _dbContext.Course
-                .Include(course => course.Modules)
+                .Include(course => course.CourseModules)
+                .Include(course => course.CourseTeacher)
+                .Include(course => course.CourseCategory)
                 .ToListAsync();
 
             if (!coursesWithModules.Any())
@@ -160,19 +173,31 @@ namespace ebyteLearner.Data.Repository
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
                 CoursePrice = course.CoursePrice,
-                CourseModules = course.Modules.Select(module => new ModuleDTO
+                CourseCategory = new CategoryDTO
+                {
+                    Id = course.CourseCategory.Id,
+                    CategoryName = course.CourseCategory.CategoryName,
+                },
+                CourseTeacher = new UserDTO
+                {
+                    Id = course.CourseTeacher.Id,
+                    Username = course.CourseTeacher.Username,
+                    Email = course.CourseTeacher.Email,
+                },
+                CourseModules = course.CourseModules.Select(module => new ModuleDTO
                 {
                     Id = module.Id,
                     ModuleName = module.ModuleName,
                 }).ToList()
             }).ToList();
 
+
             return courseDTOs;
         }
 
         public async Task<int> AssociateModuleToCourse(Guid courseId, Guid moduleId)
         {
-            var course = await _dbContext.Course.Include(c => c.Modules).FirstOrDefaultAsync(c => c.Id == courseId);
+            var course = await _dbContext.Course.Include(c => c.CourseModules).FirstOrDefaultAsync(c => c.Id == courseId);
             if (course == null)
             {
                 throw new AppException($"Course '{courseId}' not found");
@@ -185,13 +210,13 @@ namespace ebyteLearner.Data.Repository
             }
 
             // Check if the module is already associated with the course
-            if (course.Modules.Any(m => m.Id == moduleId))
+            if (course.CourseModules.Any(m => m.Id == moduleId))
             {
                 throw new AppException($"Module '{moduleId}' is already associated with the course '{courseId}'");
             }
 
             // Associate the module with the course
-            course.Modules.Add(module);
+            course.CourseModules.Add(module);
 
             try
             {

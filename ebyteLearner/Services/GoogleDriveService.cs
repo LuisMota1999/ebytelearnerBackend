@@ -6,15 +6,17 @@ using Google.Apis.Services;
 using Google.Apis.Util.Store;
 using Microsoft.IdentityModel.Tokens;
 using Google.Apis.Download;
+using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.Services
 {
     public interface IDriveServiceHelper
     {
-        string CreateFolder(string parent, string folderName);
-        string UploadFile(Stream file, string fileName, string fileMime, string folder, string fileDescription);
+        string CreateFolder(string folderName = "", string parent = "");
+        Task<string> UploadFile(MemoryStream file, string fileName, string fileMime, string folder, string fileDescription);
         void DeleteFile(string fileId);
-        IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder);
+        IEnumerable<Google.Apis.Drive.v3.Data.File> GetFilesFromFolder(string folder = "");
+        IEnumerable<Google.Apis.Drive.v3.Data.File> GetFolders();
         (MemoryStream stream, string name)? DriveDownloadFile(string fileId);
     }
     public class DriveServiceHelper : IDriveServiceHelper
@@ -67,11 +69,17 @@ namespace ebyteLearner.Services
             return service;
         }
 
-        public string CreateFolder(string parent = "", string folderName = "")
+        public string CreateFolder(string folderName = "", string parent = "")
         {
             if (parent.IsNullOrEmpty())
             {
-                parent = DirectoryID;
+                throw new ValidationException(nameof(parent));
+            }
+
+            if (folderName.IsNullOrEmpty())
+            {
+                throw new ValidationException($"Folder name can not be empty");
+
             }
             var service = GetService();
             var driveFolder = new Google.Apis.Drive.v3.Data.File();
@@ -83,10 +91,12 @@ namespace ebyteLearner.Services
             return file.Id;
         }
 
-        public string UploadFile(Stream file, string fileName, string fileMime, string folder, string fileDescription)
+        public async Task<string> UploadFile(MemoryStream file, string fileName, string fileMime, string folder, string fileDescription)
         {
-            DriveService service = GetService();
+            if (folder.IsNullOrEmpty())
+                folder = DirectoryID;
 
+            DriveService service = GetService();
 
             var driveFile = new Google.Apis.Drive.v3.Data.File();
             driveFile.Name = fileName;
@@ -96,13 +106,13 @@ namespace ebyteLearner.Services
 
 
             var request = service.Files.Create(driveFile, file, fileMime);
-            request.Fields = "id";
+            request.Fields = "id, webViewLink";
 
-            var response = request.Upload();
+            var response = await request.UploadAsync();
             if (response.Status != Google.Apis.Upload.UploadStatus.Completed)
                 throw response.Exception;
 
-            return request.ResponseBody.Id;
+            return request.ResponseBody.ThumbnailLink;
         }
 
         public void DeleteFile(string fileId)
@@ -112,12 +122,38 @@ namespace ebyteLearner.Services
             command.Execute();
         }
 
-        public IEnumerable<Google.Apis.Drive.v3.Data.File> GetFiles(string folder)
+        public IEnumerable<Google.Apis.Drive.v3.Data.File> GetFilesFromFolder(string folder = "")
+        {
+            if (folder.IsNullOrEmpty())
+                folder = DirectoryID;
+
+            var service = GetService();
+
+            var fileList = service.Files.List();
+            fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents and trashed=false";
+            fileList.Fields = "nextPageToken, files(id, name, size, mimeType, webViewLink, thumbnailLink)";
+
+            var result = new List<Google.Apis.Drive.v3.Data.File>();
+            string pageToken = null;
+            do
+            {
+                fileList.PageToken = pageToken;
+                var filesResult = fileList.Execute();
+                var files = filesResult.Files;
+                pageToken = filesResult.NextPageToken;
+                result.AddRange(files);
+            } while (pageToken != null);
+
+
+            return result;
+        }
+
+        public IEnumerable<Google.Apis.Drive.v3.Data.File> GetFolders()
         {
             var service = GetService();
 
             var fileList = service.Files.List();
-            fileList.Q = $"mimeType!='application/vnd.google-apps.folder' and '{folder}' in parents";
+            fileList.Q = $"mimeType ='application/vnd.google-apps.folder'";
             fileList.Fields = "nextPageToken, files(id, name, size, mimeType)";
 
             var result = new List<Google.Apis.Drive.v3.Data.File>();

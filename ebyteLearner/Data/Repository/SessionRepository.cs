@@ -10,7 +10,7 @@ namespace ebyteLearner.Interfaces
 {
     public interface ISessionRepository
     {
-        Task Create(CreateSessionRequestDTO request);
+        Task Create(CreateSessionRequestDTO request, byte[] QRCode);
         Task Update(Session session);
     }
 
@@ -26,16 +26,16 @@ namespace ebyteLearner.Interfaces
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task Create(CreateSessionRequestDTO request)
+        public async Task Create(CreateSessionRequestDTO request, byte[] QRCode)
         {
             if (_dbContext.Session.Any(x => x.StartSessionDate <= request.EndSessionDate && x.EndSessionDate >= request.StartSessionDate))
                 throw new AppException("End session date cannot be greater than the start session date.");
 
-            if (_dbContext.Session.Any(x => (x.StartSessionDate <= request.EndSessionDate && x.EndSessionDate >= request.StartSessionDate) && x.ModuleID == request.ModuleID))
-                throw new AppException("There is already a session registered within the specified date range for the module with ID " + request.ModuleID + ".");
-
+            if (_dbContext.Session.Any(x => (x.StartSessionDate <= request.EndSessionDate && x.EndSessionDate >= request.StartSessionDate) && x.SessionModuleID == request.SessionModuleID))
+                throw new AppException("There is already a session registered within the specified date range for the module with ID " + request.SessionModuleID + ".");
 
             var session = _mapper.Map<Session>(request);
+            session.QRCode = QRCode;
             _dbContext.Session.Add(session);
             await _dbContext.SaveChangesAsync();
         }

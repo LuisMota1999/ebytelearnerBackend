@@ -3,13 +3,12 @@ using Microsoft.EntityFrameworkCore;
 using ebyteLearner.DTOs.User;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
-using ebyteLearner.DTOs.Course;
 
 namespace ebyteLearner.Data.Repository
 {
     public interface IUserRepository
     {
-        Task Update(Guid id, UpdateUserRequestDTO request);
+        Task<UserDTO> Update(Guid id, UpdateUserRequestDTO request);
         Task<UserDTO> Read(Guid id);
         IQueryable<UserDTO> ReadAllUsers();
         IQueryable<UserDTO> SearchUsers(string searchQuery);
@@ -29,8 +28,14 @@ namespace ebyteLearner.Data.Repository
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task Update(Guid id, UpdateUserRequestDTO request)
+        public async Task<UserDTO> Update(Guid id, UpdateUserRequestDTO request)
         {
+
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             var userDB = await _dbContext.User.FindAsync(id);
             if (userDB != null)
             {
@@ -40,7 +45,7 @@ namespace ebyteLearner.Data.Repository
                 try
                 {
                     await _dbContext.SaveChangesAsync();
-                    
+                    return _mapper.Map<UserDTO>(userDB);
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
@@ -105,7 +110,7 @@ namespace ebyteLearner.Data.Repository
         public IQueryable<UserDTO> GetActiveTeacherUsers()
         {
             return _dbContext.User
-                .Where(u => u.UserRole == UserRole.Teacher)
+                .Where(u => u.UserRole == UserRole.Teacher && u.Active == true)
                 .Select(u => _mapper.Map<UserDTO>(u));
         }
 

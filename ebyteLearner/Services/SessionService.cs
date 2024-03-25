@@ -25,7 +25,7 @@ namespace ebyteLearner.Services
         {
             byte[] QRCode = await GenerateQRCodeBase64("Teste");
 
-            await _sessionRepository.Create(request);
+            await _sessionRepository.Create(request, QRCode);
         }
 
         private async Task<byte[]> GenerateQRCodeBase64(string data)

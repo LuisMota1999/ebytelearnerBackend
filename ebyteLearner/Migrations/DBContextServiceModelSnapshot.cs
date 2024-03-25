@@ -78,6 +78,9 @@ namespace ebyteLearner.Migrations
                     b.Property<string>("CourseImageURL")
                         .HasColumnType("longtext");
 
+                    b.Property<bool>("CourseIsPublished")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("CourseName")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -90,9 +93,6 @@ namespace ebyteLearner.Migrations
 
                     b.Property<DateTimeOffset>("CreatedDate")
                         .HasColumnType("datetime(6)");
-
-                    b.Property<bool>("IsPublished")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .HasColumnType("datetime(6)");
@@ -192,10 +192,10 @@ namespace ebyteLearner.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<float>("Score")
+                    b.Property<float>("QuestionScore")
                         .HasColumnType("float");
 
-                    b.Property<int>("Slide")
+                    b.Property<int>("QuestionSlide")
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
@@ -220,10 +220,7 @@ namespace ebyteLearner.Migrations
                     b.Property<DateTimeOffset>("EndSessionDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid>("ModuleID")
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid>("PdfDocumentID")
+                    b.Property<Guid?>("ModuleId")
                         .HasColumnType("char(36)");
 
                     b.Property<byte[]>("QRCode")
@@ -234,12 +231,19 @@ namespace ebyteLearner.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid>("SessionMonitoringID")
+                    b.Property<Guid>("SessionModuleID")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("SessionMonitoringID")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("SessionName")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<Guid?>("SessionPdfId")
+                        .IsRequired()
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("StartSessionDate")
                         .HasColumnType("datetime(6)");
@@ -249,11 +253,11 @@ namespace ebyteLearner.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ModuleID");
-
-                    b.HasIndex("PdfDocumentID");
+                    b.HasIndex("ModuleId");
 
                     b.HasIndex("SessionMonitoringID");
+
+                    b.HasIndex("SessionPdfId");
 
                     b.ToTable("Session");
                 });
@@ -376,7 +380,7 @@ namespace ebyteLearner.Migrations
             modelBuilder.Entity("ebyteLearner.Models.Answer", b =>
                 {
                     b.HasOne("ebyteLearner.Models.Question", "Question")
-                        .WithMany("Answers")
+                        .WithMany("QuestionAnswers")
                         .HasForeignKey("QuestionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -386,27 +390,27 @@ namespace ebyteLearner.Migrations
 
             modelBuilder.Entity("ebyteLearner.Models.Course", b =>
                 {
-                    b.HasOne("ebyteLearner.Models.Category", "Category")
-                        .WithMany("Courses")
+                    b.HasOne("ebyteLearner.Models.Category", "CourseCategory")
+                        .WithMany()
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ebyteLearner.Models.User", "User")
+                    b.HasOne("ebyteLearner.Models.User", "CourseTeacher")
                         .WithMany()
                         .HasForeignKey("CourseTeacherID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
+                    b.Navigation("CourseCategory");
 
-                    b.Navigation("User");
+                    b.Navigation("CourseTeacher");
                 });
 
             modelBuilder.Entity("ebyteLearner.Models.Module", b =>
                 {
                     b.HasOne("ebyteLearner.Models.Course", "Course")
-                        .WithMany("Modules")
+                        .WithMany("CourseModules")
                         .HasForeignKey("CourseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -440,25 +444,21 @@ namespace ebyteLearner.Migrations
                 {
                     b.HasOne("ebyteLearner.Models.Module", null)
                         .WithMany("Sessions")
-                        .HasForeignKey("ModuleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ebyteLearner.Models.Pdf", "PdfDocument")
-                        .WithMany()
-                        .HasForeignKey("PdfDocumentID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ModuleId");
 
                     b.HasOne("ebyteLearner.Models.SessionMonitoring", "SessionMonitoring")
                         .WithMany()
-                        .HasForeignKey("SessionMonitoringID")
+                        .HasForeignKey("SessionMonitoringID");
+
+                    b.HasOne("ebyteLearner.Models.Pdf", "SessionPdf")
+                        .WithMany()
+                        .HasForeignKey("SessionPdfId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PdfDocument");
-
                     b.Navigation("SessionMonitoring");
+
+                    b.Navigation("SessionPdf");
                 });
 
             modelBuilder.Entity("ebyteLearner.Models.User", b =>
@@ -487,14 +487,9 @@ namespace ebyteLearner.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ebyteLearner.Models.Category", b =>
-                {
-                    b.Navigation("Courses");
-                });
-
             modelBuilder.Entity("ebyteLearner.Models.Course", b =>
                 {
-                    b.Navigation("Modules");
+                    b.Navigation("CourseModules");
 
                     b.Navigation("Users");
                 });
@@ -506,7 +501,7 @@ namespace ebyteLearner.Migrations
 
             modelBuilder.Entity("ebyteLearner.Models.Question", b =>
                 {
-                    b.Navigation("Answers");
+                    b.Navigation("QuestionAnswers");
                 });
 
             modelBuilder.Entity("ebyteLearner.Models.Session", b =>

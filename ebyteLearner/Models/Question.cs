@@ -8,10 +8,10 @@ namespace ebyteLearner.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; init; }
-        public int Slide { get; set; }
+        public int QuestionSlide { get; set; }
         public string QuestionName { get; set; }
-        public List<Answer> Answers { get; set; }
-        public float Score { get; set; }
+        public List<Answer> QuestionAnswers { get; set; }
+        public float QuestionScore { get; set; } = 0;
         public Guid PDFId { get; set; }
 
         [ForeignKey("PDFId")]

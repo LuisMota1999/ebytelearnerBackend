@@ -10,7 +10,7 @@ namespace ebyteLearner.Services
     public interface IUserService
     {
         Task<IEnumerable<UserDTO>> SearchUser(string searchQuery, int page = 1, int pageSize = 10);
-        void UpdateUser(Guid Id, UpdateUserRequestDTO request);
+        Task<UserDTO> UpdateUser(Guid Id, UpdateUserRequestDTO request);
         Task<IEnumerable<UserDTO>> GetAllUsers();
         Task<IEnumerable<UserDTO>> GetActiveTeacherUsers();
         Task<UserDTO> GetUser(Guid id);
@@ -28,12 +28,10 @@ namespace ebyteLearner.Services
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public void UpdateUser(Guid Id, UpdateUserRequestDTO request)
+        public async Task<UserDTO> UpdateUser(Guid Id, UpdateUserRequestDTO request)
         {
 
-            _userRepository.Update(Id, request);
-
-
+            return await _userRepository.Update(Id, request);
         }
 
         public async Task<IEnumerable<UserDTO>> SearchUser(string searchQuery, int page = 1, int pageSize = 10)

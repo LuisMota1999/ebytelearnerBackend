@@ -6,13 +6,13 @@ namespace ebyteLearner.DTOs.Question
     public class CreateQuestionRequestDTO
     {
         [Required]
-        public int Slide { get; set; }
+        public int QuestionSlide { get; set; }
         [Required]
         public string QuestionName { get; set; }
         [Required]
-        public List<AnswerDTO> Answers { get; set; }
+        public List<AnswerDTO> QuestionAnswers { get; set; }
         [Required]
-        public float Score { get; set; }
+        public float QuestionScore { get; set; } = 0;
         [Required]
         public Guid PDFId { get; set; }
         public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.UtcNow;

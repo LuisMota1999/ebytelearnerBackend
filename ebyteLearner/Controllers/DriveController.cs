@@ -2,6 +2,7 @@
 using ebyteLearner.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.Controllers
 {
@@ -21,29 +22,86 @@ namespace ebyteLearner.Controllers
 
         }
 
+        /// <summary>
+        /// Create a folder in Google Drive.
+        /// </summary>
+        /// <remarks>
+        /// Creates a folder in the specified location on Google Drive.
+        /// </remarks>
+        /// <param name="request">The request containing the folder name.</param>
+        /// <param name="id">The ID of the parent folder where the new folder will be created.</param>
+        /// <returns>Returns the information about the created folder.</returns>
         [AllowAnonymous]
-        [HttpPost("CreateFolder")]
-        public IActionResult CreateFolder([FromBody] GoogleDriveCreateFolderRequestDTO request)
+        [HttpPost("{id}/CreateFolder")]
+        public IActionResult CreateFolder([FromBody] GoogleDriveCreateFolderRequestDTO request, [FromRoute] string id)
         {
-            if (request.FolderName != null)
+            try
             {
-                string response = _driveService.CreateFolder("1m7tjucJGeEAbAHyvoCRhQdaoillkSpJn", request.FolderName);
+                var response = _driveService.CreateFolder(request.FolderName, id);
                 return Ok(response);
             }
-            return BadRequest(new { message = "Something went wrong!" });
+            catch (ValidationException v)
+            {
+                return StatusCode(500, $"A validation error occurred: {v.Message}");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"An error occurred: {e.Message}");
+            }
         }
 
-
+        /// <summary>
+        /// Get files from a specific folder in Google Drive.
+        /// </summary>
+        /// <remarks>
+        /// Retrieves the list of files stored in the specified folder on Google Drive.
+        /// </remarks>
+        /// <returns>Returns the list of files in the folder.</returns>
         [AllowAnonymous]
-        [HttpGet("GetFiles")]
+        [HttpGet("GetFilesFromFolder")]
         public IActionResult GetFiles()
         {
-            var response = _driveService.GetFiles("1m7tjucJGeEAbAHyvoCRhQdaoillkSpJn");
-
-            return Ok(response);
+            try
+            {
+                var response = _driveService.GetFilesFromFolder();
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"An error occurred: {e.Message}");
+            }
         }
 
+        /// <summary>
+        /// Get all folders from Google Drive.
+        /// </summary>
+        /// <remarks>
+        /// Retrieves all folders stored in Google Drive.
+        /// </remarks>
+        /// <returns>Returns the list of all folders in Google Drive.</returns>
+        [AllowAnonymous]
+        [HttpGet("GetFolders")]
+        public IActionResult GetFolders()
+        {
+            try
+            {
+                var response = _driveService.GetFolders();
+                return Ok(response);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"An error occurred: {e.Message}");
+            }
+        }
 
+        /// <summary>
+        /// Download a file from Google Drive.
+        /// </summary>
+        /// <remarks>
+        /// Downloads the specified file from Google Drive.
+        /// </remarks>
+        /// <param name="fileId">The ID of the file to download.</param>
+        /// <returns>Returns the downloaded file.</returns>
         [AllowAnonymous]
         [HttpGet("{fileId}")]
         public IActionResult DownloadFile(string fileId)
