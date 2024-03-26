@@ -10,7 +10,7 @@ namespace ebyteLearner.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; init; }
         public string ModuleName { get; set; }
-        public string ModuleDescription { get; set; }
+        public string? ModuleDescription { get; set; }
         public List<Session> Sessions { get; set; }
 
         [ForeignKey("CourseId")]

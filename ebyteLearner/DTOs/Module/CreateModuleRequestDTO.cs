@@ -7,7 +7,7 @@ namespace ebyteLearner.DTOs.Module
     {
         [Required]
         public string ModuleName { get; set; }
-        public string ModuleDescription { get; set; }
+        public string? ModuleDescription { get; set; }
         [Required]
         public Guid CourseID { get; set; }
     }

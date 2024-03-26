@@ -119,11 +119,13 @@ namespace ebyteLearner.Controllers
         {
             try
             {
-                int rowsAffected = await _moduleService.CreateModule(request);
+                var result = await _moduleService.CreateModule(request);
+                int rowsAffected = result.rows;
+                ModuleDTO createdModule = result.module;
 
                 if (rowsAffected > 0)
                 {
-                    return Ok($"Module named {request.ModuleName} created successfully!");
+                    return Ok(createdModule);
                 }
                 else
                 {

@@ -32,14 +32,14 @@ namespace ebyteLearner.Services
 
         public async Task<CourseDTO> GetCourse(Guid id)
         {
-            var cachedCourse = _cacheService.GetData<CourseDTO>(id.ToString());
-            if (cachedCourse != null)
-                return cachedCourse;
+            //var cachedCourse = _cacheService.GetData<CourseDTO>(id.ToString());
+            //if (cachedCourse != null)
+            //    return cachedCourse;
 
-            var expiryTime = DateTimeOffset.Now.AddMinutes(60);
+            //var expiryTime = DateTimeOffset.Now.AddMinutes(60);
 
             var response = await _courseRepository.Read(id);
-            _cacheService.SetData<CourseDTO>(id.ToString(), response, expiryTime);
+            //_cacheService.SetData<CourseDTO>(id.ToString(), response, expiryTime);
 
             return response;
         }
@@ -56,8 +56,7 @@ namespace ebyteLearner.Services
         public async Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
         {
             var response = await _courseRepository.Update(id, request);
-            var expiryTime = DateTimeOffset.Now.AddMinutes(60);
-            _cacheService.SetData<CourseDTO>(id.ToString(), response, expiryTime);
+
             return response;
         }
 

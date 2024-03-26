@@ -75,27 +75,31 @@ namespace ebyteLearner.Data.Repository
         public async Task<CourseDTO> Read(Guid id)
         {
             var courseWithModules = await _dbContext.Course
+                .Include(course => course.CourseModules)
+                .Include(course => course.CourseTeacher)
+                .Include(course => course.CourseCategory)
                 .Where(course => course.Id == id)
                 .Select(course => new CourseDTO
                 {
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
-                    CourseCategory = new CategoryDTO
+                    CoursePrice = course.CoursePrice,
+                    CourseCategory = course.CourseCategory != null ? new CategoryDTO
                     {
                         Id = course.CourseCategory.Id,
                         CategoryName = course.CourseCategory.CategoryName,
-                    },
-                    CourseTeacher = new UserDTO
+                    } : null,
+                    CourseTeacher = course.CourseTeacher != null ? new UserDTO
                     {
                         Id = course.CourseTeacher.Id,
                         Username = course.CourseTeacher.Username,
                         Email = course.CourseTeacher.Email,
-                    },
+                    } : null,
                     CourseModules = course.CourseModules.Select(module => new ModuleDTO
                     {
                         Id = module.Id,
-                        ModuleName = module.ModuleName
+                        ModuleName = module.ModuleName,
                     }).ToList()
                 })
                 .FirstOrDefaultAsync();
@@ -177,17 +181,17 @@ namespace ebyteLearner.Data.Repository
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
                 CoursePrice = course.CoursePrice,
-                CourseCategory = new CategoryDTO
+                CourseCategory = course.CourseCategory != null ? new CategoryDTO
                 {
                     Id = course.CourseCategory.Id,
                     CategoryName = course.CourseCategory.CategoryName,
-                },
-                CourseTeacher = new UserDTO
+                } : null,
+                CourseTeacher = course.CourseTeacher != null ? new UserDTO
                 {
                     Id = course.CourseTeacher.Id,
                     Username = course.CourseTeacher.Username,
                     Email = course.CourseTeacher.Email,
-                },
+                } : null,
                 CourseModules = course.CourseModules.Select(module => new ModuleDTO
                 {
                     Id = module.Id,

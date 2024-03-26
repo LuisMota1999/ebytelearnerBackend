@@ -9,7 +9,7 @@ namespace ebyteLearner.Data.Repository
 {
     public interface IModuleRepository
     {
-        Task<int> Create(CreateModuleRequestDTO request);
+        Task<(int rowsAffected, ModuleDTO module)> Create(CreateModuleRequestDTO request);
         Task<ModuleDTO> Read(Guid id);
         Task<ModuleDTO> Update(Guid id, UpdateModuleRequestDTO request);
         Task Delete(Guid id);
@@ -28,17 +28,16 @@ namespace ebyteLearner.Data.Repository
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<int> Create(CreateModuleRequestDTO request)
+        public async Task<(int rowsAffected, ModuleDTO module)> Create(CreateModuleRequestDTO request)
         {
-
             if (request.ModuleName.IsNullOrEmpty())
-                throw new AppException($"Module name can not be empty");
+                throw new AppException($"Module name cannot be empty");
 
             if (_dbContext.Module.Any(x => x.ModuleName == request.ModuleName))
-                throw new AppException("Module '" + request.ModuleName + "' is already registered");
+                throw new AppException($"Module '{request.ModuleName}' is already registered");
 
             if (_dbContext.Course.Find(request.CourseID) == null)
-                throw new AppException("Course '" + request.CourseID + "' not found or do not exist");
+                throw new AppException($"Course '{request.CourseID}' not found or does not exist");
 
             var module = _mapper.Map<Module>(request);
 
@@ -49,15 +48,15 @@ namespace ebyteLearner.Data.Repository
 
                 _logger.LogInformation($"Created module with ID: {module.Id}, rows affected: {rowsAffected}");
 
-                return rowsAffected;
+                return (rowsAffected, _mapper.Map<ModuleDTO>(module));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error occurred while creating module");
-
                 throw;
             }
         }
+
 
         public async Task<ModuleDTO> Read(Guid id)
         {

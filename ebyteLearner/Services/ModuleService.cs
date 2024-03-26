@@ -1,12 +1,13 @@
 ﻿using AutoMapper;
 using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.Module;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace ebyteLearner.Services
 {
     public interface IModuleService
     {
-        Task<int> CreateModule(CreateModuleRequestDTO request);
+        Task<(int rows, ModuleDTO module)> CreateModule(CreateModuleRequestDTO request);
         Task<ModuleDTO> GetModule(Guid id);
         Task<ModuleDTO> UpdateModule(Guid Id, UpdateModuleRequestDTO request);
         Task DeleteModule(Guid id);
@@ -28,9 +29,10 @@ namespace ebyteLearner.Services
             _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService)); ;
         }
 
-        public async Task<int> CreateModule(CreateModuleRequestDTO request)
+        public async Task<(int rows, ModuleDTO module)> CreateModule(CreateModuleRequestDTO request)
         {
-            return await _moduleRepository.Create(request);
+            var (rows, response) = await _moduleRepository.Create(request);
+            return (rows, response);
         }
         public async Task<ModuleDTO> UpdateModule(Guid Id, UpdateModuleRequestDTO request)
         {

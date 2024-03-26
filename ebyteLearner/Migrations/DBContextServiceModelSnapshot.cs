@@ -132,7 +132,6 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ModuleDescription")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<string>("ModuleName")
