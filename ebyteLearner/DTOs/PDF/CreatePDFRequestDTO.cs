@@ -7,6 +7,5 @@
         public string PDFContent { get; set; }
         public long PDFLength { get; set; }
         public Guid ModuleID { get; set; }
-        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
     }
 }

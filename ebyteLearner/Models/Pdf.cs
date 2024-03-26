@@ -19,7 +19,9 @@ namespace ebyteLearner.Models
         public Module Module { get; set; }
         [JsonIgnore]
         public Guid ModuleID { get; set; }
-        public DateTimeOffset CreatedDate { get; set; }
-        public DateTimeOffset UpdatedDate { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTimeOffset UpdatedDate { get; init; }
     }
 }

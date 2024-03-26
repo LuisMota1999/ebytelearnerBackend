@@ -10,6 +10,5 @@ namespace ebyteLearner.DTOs.Module
         public string ModuleDescription { get; set; }
         [Required]
         public Guid CourseID { get; set; }
-        public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.Now;
     }
 }

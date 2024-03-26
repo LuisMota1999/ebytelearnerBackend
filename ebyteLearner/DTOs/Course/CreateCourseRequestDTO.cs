@@ -6,14 +6,12 @@ namespace ebyteLearner.DTOs.Course
     {
         [Required]
         public string CourseName { get; set; }
+        [Required]
         public string CourseDescription { get; set; }
         [Required]
         public float CoursePrice { get; set; }
-        [Required]
-        public Guid CategoryId { get; set; }
-        [Required]
-        public Guid CourseTeacherID { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? CourseTeacherID { get; set; }
         public bool? IsPublished { get; set; } = false;
-        public DateTimeOffset? CreatedDate { get; init; } = DateTimeOffset.Now;
     }
 }

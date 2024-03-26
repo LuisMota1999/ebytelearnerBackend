@@ -14,7 +14,9 @@ namespace ebyteLearner.Models
         public bool ShowingQuestion { get; init; }
         public bool ShowingQrCode { get; init; }
         public int Slide { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset UpdatedDate { get; init; }
 
     }

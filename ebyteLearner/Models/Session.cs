@@ -23,7 +23,9 @@ namespace ebyteLearner.Models
         public Guid? SessionMonitoringID { get; set; }
         public DateTimeOffset StartSessionDate { get; set; }
         public DateTimeOffset EndSessionDate { get; set; }
-        public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
-        public DateTimeOffset UpdatedDate { get; set; } = DateTimeOffset.Now;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTimeOffset UpdatedDate { get; init; }
     }
 }

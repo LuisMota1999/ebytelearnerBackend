@@ -6,6 +6,7 @@ using ebyteLearner.Helpers;
 using ebyteLearner.Models;
 using Microsoft.IdentityModel.Tokens;
 using ebyteLearner.DTOs.Category;
+using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.Data.Repository
 {
@@ -33,12 +34,15 @@ namespace ebyteLearner.Data.Repository
 
         public async Task<int> Create(CreateCourseRequestDTO request)
         {
-           
-            if (_dbContext.Category.Find(request.CategoryId) == null)
-                throw new AppException("Category '" + request.CategoryId + "' not found");
-            
-            if (_dbContext.User.Find(request.CourseTeacherID) == null)
-                throw new AppException("Teacher '" + request.CategoryId + "' not found");
+
+            //if (_dbContext.Category.Find(request.CategoryId) == null)
+            //    throw new AppException("Category '" + request.CategoryId + "' not found");
+
+            //if (_dbContext.User.Find(request.CourseTeacherID) == null)
+            //    throw new AppException("Teacher '" + request.CategoryId + "' not found");
+
+            if (request.CoursePrice <= 0)
+                throw new ValidationException($"Course price can not be 0 or less");
 
             if (request.CourseName.IsNullOrEmpty())
                 throw new AppException($"Course name can not be empty");

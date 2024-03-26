@@ -12,6 +12,5 @@ namespace ebyteLearner.DTOs.User
         public string? Gender { get; set; }
         public string? Nationality { get; set; }
         public DateTimeOffset? Birthday { get; set; }
-        public DateTimeOffset UpdatedDate { get; init; } = DateTimeOffset.Now;
     }
 }

@@ -6,6 +6,8 @@ namespace ebyteLearner.DTOs.Course
     {
         public string? CourseName { get; set; }
         public string? CourseDescription { get; set; }
-        public DateTimeOffset? UpdatedDate { get; init; } = DateTimeOffset.Now;
+        public float? CoursePrice { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? CourseTeacherID { get; set; }
     }
 }

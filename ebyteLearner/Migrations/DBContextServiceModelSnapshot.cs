@@ -32,12 +32,14 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("QuestionID")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -57,6 +59,14 @@ namespace ebyteLearner.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime(6)");
+
                     b.HasKey("Id");
 
                     b.ToTable("Category");
@@ -68,7 +78,7 @@ namespace ebyteLearner.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid>("CategoryID")
+                    b.Property<Guid?>("CategoryID")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CourseDescription")
@@ -78,7 +88,7 @@ namespace ebyteLearner.Migrations
                     b.Property<string>("CourseImageURL")
                         .HasColumnType("longtext");
 
-                    b.Property<bool>("CourseIsPublished")
+                    b.Property<bool?>("CourseIsPublished")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("CourseName")
@@ -88,13 +98,15 @@ namespace ebyteLearner.Migrations
                     b.Property<float>("CoursePrice")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("CourseTeacherID")
+                    b.Property<Guid?>("CourseTeacherID")
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -116,6 +128,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("ModuleDescription")
@@ -127,6 +140,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -143,6 +157,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("ModuleID")
@@ -167,6 +182,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -183,6 +199,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<Guid>("PDFId")
@@ -199,6 +216,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -215,6 +233,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTimeOffset>("EndSessionDate")
@@ -249,6 +268,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -269,6 +289,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<bool>("ShowingQrCode")
@@ -284,6 +305,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("Id");
@@ -307,6 +329,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<string>("Docn")
@@ -336,6 +359,7 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.Property<int>("UserRole")
@@ -365,9 +389,11 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<DateTimeOffset>("CreatedDate")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)");
 
                     b.Property<DateTimeOffset>("UpdatedDate")
+                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
 
                     b.HasKey("UserId", "SessionId");
@@ -392,15 +418,11 @@ namespace ebyteLearner.Migrations
                 {
                     b.HasOne("ebyteLearner.Models.Category", "CourseCategory")
                         .WithMany()
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryID");
 
                     b.HasOne("ebyteLearner.Models.User", "CourseTeacher")
                         .WithMany()
-                        .HasForeignKey("CourseTeacherID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CourseTeacherID");
 
                     b.Navigation("CourseCategory");
 

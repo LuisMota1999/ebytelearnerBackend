@@ -16,6 +16,5 @@ namespace ebyteLearner.DTOs.Module
         public DateTimeOffset StartSessionDate { get; set; } = DateTimeOffset.UtcNow;
         [Required]
         public DateTimeOffset EndSessionDate { get; set; } = DateTimeOffset.UtcNow.AddHours(1);
-        public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.UtcNow;
     }
 }

@@ -12,17 +12,19 @@ namespace ebyteLearner.Models
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public float CoursePrice { get; set; }
-        public bool CourseIsPublished { get; set; } = false;
+        public bool? CourseIsPublished { get; set; } = false;
         public string? CourseImageURL { get; set; }
         [ForeignKey("CourseTeacherID")]
-        public User CourseTeacher { get; set; }
-        public Guid CourseTeacherID { get; set; }
+        public User? CourseTeacher { get; set; }
+        public Guid? CourseTeacherID { get; set; }
         [ForeignKey("CategoryID")]
-        public Category CourseCategory { get; set; }
-        public Guid CategoryID { get; set; }
+        public Category? CourseCategory { get; set; }
+        public Guid? CategoryID { get; set; }
         public List<Module> CourseModules { get; set; }
         public List<User> Users { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset UpdatedDate { get; init; }
     }
 }

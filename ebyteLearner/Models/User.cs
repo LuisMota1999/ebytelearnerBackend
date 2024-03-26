@@ -27,8 +27,10 @@ namespace ebyteLearner.Models
         public bool Active { get; set; } = true;
         public ICollection<UserSession> UserSessions { get; set; }
         public DateTimeOffset? Birthday { get; set; }
-        public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.Now;
-        public DateTimeOffset UpdatedDate { get; init; } = DateTimeOffset.Now;
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTimeOffset UpdatedDate { get; init; }
     }
 
     public enum UserRole

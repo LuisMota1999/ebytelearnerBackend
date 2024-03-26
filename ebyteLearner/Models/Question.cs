@@ -16,7 +16,9 @@ namespace ebyteLearner.Models
 
         [ForeignKey("PDFId")]
         public Pdf RelatedPDF { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset UpdatedDate { get; init; }
     }
 }

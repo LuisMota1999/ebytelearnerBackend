@@ -15,6 +15,5 @@ namespace ebyteLearner.DTOs.Question
         public float QuestionScore { get; set; } = 0;
         [Required]
         public Guid PDFId { get; set; }
-        public DateTimeOffset CreatedDate { get; init; } = DateTimeOffset.UtcNow;
     }
 }

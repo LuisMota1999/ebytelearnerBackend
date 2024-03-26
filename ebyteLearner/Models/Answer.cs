@@ -15,7 +15,10 @@ namespace ebyteLearner.Models
         [ForeignKey("QuestionID")]
         public Question Question { get; set; }
         public Guid QuestionID { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset UpdatedDate { get; init; }
     }
 }

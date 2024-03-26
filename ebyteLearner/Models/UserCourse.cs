@@ -13,7 +13,9 @@ namespace ebyteLearner.Models
         [ForeignKey("CourseId")]
         public Course Course { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTimeOffset CreatedDate { get; init; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTimeOffset UpdatedDate { get; init; }
     }
 }
