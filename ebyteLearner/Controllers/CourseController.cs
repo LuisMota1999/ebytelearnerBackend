@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ebyteLearner.DTOs.Course;
 using ebyteLearner.Services;
 using System.ComponentModel.DataAnnotations;
+using ebyteLearner.DTOs.Module;
 
 namespace ebyteLearner.Controllers
 {
@@ -85,12 +86,23 @@ namespace ebyteLearner.Controllers
         /// <param name="request">The updated course information.</param>
         /// <returns>Returns a message indicating the success of the update operation.</returns>
         [HttpPut("Update/{id}")]
-        public IActionResult UpdateCourse([FromRoute] Guid id, [FromBody] UpdateCourseRequestDTO request)
+        public async Task<IActionResult> UpdateCourse([FromRoute] Guid id, [FromBody] UpdateCourseRequestDTO request)
         {
+
             try
             {
-                _courseService.UpdateCourse(id, request);
-                return Ok($"Course {id} updated successfully");
+                var result = await _courseService.UpdateCourse(id, request);
+                int rowsAffected = result.rows;
+                CourseDTO updatedCourseDTO = result.course;
+
+                if (rowsAffected > 0)
+                {
+                    return Ok(updatedCourseDTO);
+                }
+                else
+                {
+                    return StatusCode(StatusCodes.Status409Conflict, "Failed to create module");
+                }
             }
             catch (ValidationException ex)
             {

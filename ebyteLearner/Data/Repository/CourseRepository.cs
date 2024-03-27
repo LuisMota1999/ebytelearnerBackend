@@ -12,7 +12,7 @@ namespace ebyteLearner.Data.Repository
 {
     public interface ICourseRepository
     {
-        Task<CourseDTO> Update(Guid id, UpdateCourseRequestDTO request);
+        Task<(int, CourseDTO)> Update(Guid id, UpdateCourseRequestDTO request);
         Task<CourseDTO> Read(Guid id);
         Task<IEnumerable<CourseDTO>> ReadAllCourses();
         Task Delete(Guid id);
@@ -84,7 +84,7 @@ namespace ebyteLearner.Data.Repository
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
-                    CoursePrice = course.CoursePrice,
+                    CoursePrice = course.CoursePrice.HasValue ? course.CoursePrice.Value : 0, // Handling nullable float
                     CourseCategory = course.CourseCategory != null ? new CategoryDTO
                     {
                         Id = course.CourseCategory.Id,
@@ -113,7 +113,7 @@ namespace ebyteLearner.Data.Repository
             return courseWithModules;
         }
 
-        public async Task<CourseDTO> Update(Guid id, UpdateCourseRequestDTO request)
+        public async Task<(int, CourseDTO)> Update(Guid id, UpdateCourseRequestDTO request)
         {
             if (request == null)
             {
@@ -123,24 +123,32 @@ namespace ebyteLearner.Data.Repository
             var courseDB = await _dbContext.Course.FindAsync(id);
             if (courseDB != null)
             {
-                _mapper.Map(request, courseDB);
-                _dbContext.Entry(courseDB).State = EntityState.Modified;
+                // Atualize apenas os campos não nulos presentes na solicitação
+                if (!string.IsNullOrEmpty(request.CourseName))
+                {
+                    courseDB.CourseName = request.CourseName;
+                }
+                if (!string.IsNullOrEmpty(request.CourseDescription))
+                {
+                    courseDB.CourseDescription = request.CourseDescription;
+                }
+                if (request.CoursePrice.HasValue)
+                {
+                    courseDB.CoursePrice = request.CoursePrice.Value;
+                }
 
                 try
                 {
-                    await _dbContext.SaveChangesAsync();
-                    return _mapper.Map<CourseDTO>(courseDB);
+                    var rowsAffected = await _dbContext.SaveChangesAsync();
+                    _logger.LogInformation($"Updated Course with ID: {courseDB.Id}, rows affected: {rowsAffected}");
+                    return (rowsAffected, _mapper.Map<CourseDTO>(courseDB));
                 }
                 catch (DbUpdateConcurrencyException ex)
                 {
-                    // Handle concurrency conflicts
-                    // Log the exception and return an appropriate response
                     throw new AppException("Concurrency conflict occurred while updating the course.", ex);
                 }
                 catch (DbUpdateException ex)
                 {
-                    // Handle database update exception
-                    // Log the exception and return an appropriate response
                     throw new AppException("Error occurred while updating the course in the database.", ex);
                 }
             }
@@ -149,6 +157,7 @@ namespace ebyteLearner.Data.Repository
                 throw new AppException($"Course with ID '{id}' not found.");
             }
         }
+
 
         public async Task Delete(Guid id)
         {
@@ -180,7 +189,7 @@ namespace ebyteLearner.Data.Repository
                 Id = course.Id,
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
-                CoursePrice = course.CoursePrice,
+                CoursePrice = course.CoursePrice.HasValue ? course.CoursePrice.Value : 0, // Handling nullable float
                 CourseCategory = course.CourseCategory != null ? new CategoryDTO
                 {
                     Id = course.CourseCategory.Id,

@@ -82,7 +82,9 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("CourseDescription")
-                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("CourseDirectory")
                         .HasColumnType("longtext");
 
                     b.Property<string>("CourseImageURL")
@@ -95,7 +97,7 @@ namespace ebyteLearner.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<float>("CoursePrice")
+                    b.Property<float?>("CoursePrice")
                         .HasColumnType("float");
 
                     b.Property<Guid?>("CourseTeacherID")
@@ -138,9 +140,18 @@ namespace ebyteLearner.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<int?>("ModuleOrder")
+                        .HasColumnType("int");
+
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
+
+                    b.Property<bool?>("isFree")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool?>("isPublished")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 

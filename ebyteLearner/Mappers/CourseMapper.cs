@@ -8,17 +8,15 @@ namespace ebyteLearner.Mappers
     {
         public CourseMapper()
         {
-            // CreateCourseDTO -> Course
-            CreateMap<CreateCourseRequestDTO, Course>();
+            CreateMap<UpdateCourseRequestDTO, Course>()
+                .ForAllMembers(opt => opt.Condition((src, dest, prop) => prop != null));
 
-            // Course -> CourseDTO
-            CreateMap<Course, CourseDTO>();
+            CreateMap<Course, UpdateCourseRequestDTO>()
+                .ForAllMembers(opt => opt.Condition((src, dest, prop) => prop != null));
 
-            // UpdateCourseRequest -> Course
-            CreateMap<Course, UpdateCourseRequestDTO>();
-
-            // UpdateCourseRequest -> CourseDTO
-            CreateMap<UpdateCourseRequestDTO, CourseDTO>();
+            // CreateMap para os outros mapeamentos
+            CreateMap<CreateCourseRequestDTO, Course>().ReverseMap();
+            CreateMap<Course, CourseDTO>().ReverseMap();
         }
     }
 }

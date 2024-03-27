@@ -10,7 +10,7 @@ namespace ebyteLearner.Services
         Task<IEnumerable<CourseDTO>> GetAllCourses(int returnRows = 0);
         Task<CourseDTO> GetCourse(Guid id);
         Task<int> CreateCourse(CreateCourseRequestDTO request);
-        Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request);
+        Task<(int rows, CourseDTO course)> UpdateCourse(Guid id, UpdateCourseRequestDTO request);
         Task DeleteCourse(Guid id);
         Task<int> AssocModuleToCourse(AssociateModuleRequest associateModuleRequest);
     }
@@ -20,14 +20,16 @@ namespace ebyteLearner.Services
 
         private readonly ICourseRepository _courseRepository;
         private readonly ICacheService _cacheService;
+        private readonly IDriveServiceHelper _driveServiceHelper;
         private readonly ILogger<CourseService> _logger;
         private readonly IMapper _mapper;
-        public CourseService(ICourseRepository courseRepository, ILogger<CourseService> logger, IMapper mapper, ICacheService cacheService)
+        public CourseService(ICourseRepository courseRepository, ILogger<CourseService> logger, IMapper mapper, ICacheService cacheService, IDriveServiceHelper driveServiceHelper)
         {
             _courseRepository = courseRepository;
             _logger = logger;
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService)); ;
+            _cacheService = cacheService ?? throw new ArgumentNullException(nameof(cacheService));
+            _driveServiceHelper = driveServiceHelper ?? throw new ArgumentNullException(nameof(cacheService));
         }
 
         public async Task<CourseDTO> GetCourse(Guid id)
@@ -50,14 +52,15 @@ namespace ebyteLearner.Services
             if (cachedCourses != null)
                 _cacheService.RemoveData("GetAllCourses");
 
+            request.CourseDirectory = await _driveServiceHelper.CreateFolder(request.CourseName);
             return await _courseRepository.Create(request);
         }
 
-        public async Task<CourseDTO> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
-        {
-            var response = await _courseRepository.Update(id, request);
+        public async Task<(int,CourseDTO)> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
+        {   
 
-            return response;
+            var (rows, response) = await _courseRepository.Update(id, request);
+            return (rows, response);
         }
 
         public async Task DeleteCourse(Guid id)

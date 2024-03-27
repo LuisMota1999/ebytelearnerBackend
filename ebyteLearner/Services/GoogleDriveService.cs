@@ -12,7 +12,7 @@ namespace ebyteLearner.Services
 {
     public interface IDriveServiceHelper
     {
-        string CreateFolder(string folderName = "", string parent = "");
+        Task<string> CreateFolder(string folderName = "", string parent = "");
         Task<string> UploadFile(MemoryStream file, string fileName, string fileMime, string folder, string fileDescription);
         void DeleteFile(string fileId);
         IEnumerable<Google.Apis.Drive.v3.Data.File> GetFilesFromFolder(string folder = "");
@@ -69,11 +69,11 @@ namespace ebyteLearner.Services
             return service;
         }
 
-        public string CreateFolder(string folderName = "", string parent = "")
+        public async Task<string> CreateFolder(string folderName = "", string parent = "")
         {
             if (parent.IsNullOrEmpty())
             {
-                throw new ValidationException(nameof(parent));
+                parent = DirectoryID;
             }
 
             if (folderName.IsNullOrEmpty())
@@ -87,7 +87,7 @@ namespace ebyteLearner.Services
             driveFolder.MimeType = "application/vnd.google-apps.folder";
             driveFolder.Parents = new string[] { parent };
             var command = service.Files.Create(driveFolder);
-            var file = command.Execute();
+            var file = await command.ExecuteAsync();
             return file.Id;
         }
 

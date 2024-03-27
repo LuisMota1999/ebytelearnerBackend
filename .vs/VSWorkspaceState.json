@@ -6,6 +6,6 @@
     "\\ebyteLearner\\Models",
     "\\ebyteLearner\\Services"
   ],
-  "SelectedNode": "\\ebyteLearner.sln",
+  "SelectedNode": "\\ebyteLearner\\Controllers\\ModuleController.cs",
   "PreviewInSolutionExplorer": false
 }
