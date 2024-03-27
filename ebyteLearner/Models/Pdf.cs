@@ -10,10 +10,10 @@ namespace ebyteLearner.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid Id { get; init; }
         public string PDFName { get; set; }
-        public int PDFNumberPages { get; set; }
-        public string PDFContent { get; set; }
+        public int? PDFNumberPages { get; set; }
+        public string? PDFContent { get; set; }
         public long PDFLength{ get; set; }
-        public string PDFPath { get; set; }
+        public string? PDFPath { get; set; }
 
         [ForeignKey("ModuleID")]
         public Module Module { get; set; }

@@ -174,7 +174,6 @@ namespace ebyteLearner.Migrations
                         .HasColumnType("char(36)");
 
                     b.Property<string>("PDFContent")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<long>("PDFLength")
@@ -184,11 +183,10 @@ namespace ebyteLearner.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("PDFNumberPages")
+                    b.Property<int?>("PDFNumberPages")
                         .HasColumnType("int");
 
                     b.Property<string>("PDFPath")
-                        .IsRequired()
                         .HasColumnType("longtext");
 
                     b.Property<DateTimeOffset>("UpdatedDate")

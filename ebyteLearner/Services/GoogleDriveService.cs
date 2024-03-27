@@ -13,6 +13,7 @@ namespace ebyteLearner.Services
     public interface IDriveServiceHelper
     {
         Task<string> CreateFolder(string folderName = "", string parent = "");
+        Task<string> GrantFolderPermission(string emailAddress, string userRole, string directoryId = "");
         Task<string> UploadFile(MemoryStream file, string fileName, string fileMime, string folder, string fileDescription);
         void DeleteFile(string fileId);
         IEnumerable<Google.Apis.Drive.v3.Data.File> GetFilesFromFolder(string folder = "");
@@ -29,7 +30,6 @@ namespace ebyteLearner.Services
             _configuration = configuration;
             _logger = logger;
         }
-
         private string ClientId => _configuration["ClientId"];
         private string ClientSecret => _configuration["ClientSecret"];
         private string AccessToken => _configuration["AccessToken"];
@@ -86,8 +86,39 @@ namespace ebyteLearner.Services
             driveFolder.Name = folderName;
             driveFolder.MimeType = "application/vnd.google-apps.folder";
             driveFolder.Parents = new string[] { parent };
+            driveFolder.Description = "File_"+DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
             var command = service.Files.Create(driveFolder);
             var file = await command.ExecuteAsync();
+            return file.Id;
+        }
+
+        public async Task<string> GrantFolderPermission(string emailAddress, string userRole, string directoryId = "")
+        {
+            if (directoryId.IsNullOrEmpty())
+            {
+                directoryId = DirectoryID;
+            }
+
+            if (emailAddress.IsNullOrEmpty())
+            {
+                throw new ValidationException($"Email address can not be empty");
+
+            }
+
+            if (userRole.IsNullOrEmpty())
+            {
+                throw new ValidationException($"User Role can not be empty");
+
+            }
+            var service = GetService();
+            var requestPermission = new Google.Apis.Drive.v3.Data.Permission();
+            requestPermission.Type = "user"; //"user"; "group"; "domain"; "anyone";
+            requestPermission.EmailAddress = emailAddress;
+            requestPermission.Role = userRole; //"reader", "writer", "owner", "organizer"
+ 
+            var command = service.Permissions.Create(requestPermission, directoryId);
+            var file = await command.ExecuteAsync();
+            
             return file.Id;
         }
 

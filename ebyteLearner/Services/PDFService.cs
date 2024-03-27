@@ -69,6 +69,8 @@ namespace ebyteLearner.Services
 
                 var pdfpath = await _driveService.UploadFile(file, fileName, contentType, "", moduleId.ToString());
 
+                _logger.LogInformation("Uploading file to Google Drive complete.");
+
                 var pdf = new Pdf();
                 pdf.PDFNumberPages = numberPages;
                 pdf.PDFContent = base64;

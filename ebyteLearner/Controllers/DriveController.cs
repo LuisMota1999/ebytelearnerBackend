@@ -50,6 +50,38 @@ namespace ebyteLearner.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Grant permission for a user on a specific folder in Google Drive.
+        /// </summary>
+        /// <remarks>
+        /// Grants the specified user a specific role (permission level) on the specified folder in Google Drive.
+        /// </remarks>
+        /// <param name="id">The ID of the folder on which permission is to be granted.</param>
+        /// <param name="request">The request containing the email address of the user and the role to be granted.</param>
+        /// <returns>Returns the response indicating the status of the permission grant operation.</returns>
+        [AllowAnonymous]
+        [HttpPost("{id}/GrantFolderPermission")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)] // Replace YourResponseTypeHere with the actual response type
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(string))]
+        public IActionResult GrantFolderPermission([FromBody] GoogleDriveGrantFolderPermissionRequest request, [FromRoute] string id)
+        {
+            try
+            {
+                var response = _driveService.GrantFolderPermission(request.EmailAddress, request.UserRole, id);
+                return Ok(response);
+            }
+            catch (ValidationException v)
+            {
+                return StatusCode(500, $"A validation error occurred: {v.Message}");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, $"An error occurred: {e.Message}");
+            }
+        }
+
+
         /// <summary>
         /// Get files from a specific folder in Google Drive.
         /// </summary>
