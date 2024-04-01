@@ -7,6 +7,9 @@ using Google.Apis.Util.Store;
 using Microsoft.IdentityModel.Tokens;
 using Google.Apis.Download;
 using System.ComponentModel.DataAnnotations;
+using ebyteLearner.Models;
+using System.IO;
+using System.Net.Mail;
 
 namespace ebyteLearner.Services
 {
@@ -137,13 +140,18 @@ namespace ebyteLearner.Services
 
 
             var request = service.Files.Create(driveFile, file, fileMime);
-            request.Fields = "id, webViewLink";
+            request.Fields = "id, webViewLink, thumbnailLink";
 
             var response = await request.UploadAsync();
             if (response.Status != Google.Apis.Upload.UploadStatus.Completed)
                 throw response.Exception;
 
-            return request.ResponseBody.ThumbnailLink;
+            var requestPermission = new Google.Apis.Drive.v3.Data.Permission();
+            requestPermission.Type = "anyone"; //"user"; "group"; "domain"; "anyone";
+            requestPermission.Role = "reader";
+            var command = service.Permissions.Create(requestPermission, request.ResponseBody.Id);
+            await command.ExecuteAsync();
+            return request.ResponseBody.Id;
         }
 
         public void DeleteFile(string fileId)

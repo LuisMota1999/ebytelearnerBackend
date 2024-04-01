@@ -84,6 +84,8 @@ namespace ebyteLearner.Data.Repository
                     Id = course.Id,
                     CourseName = course.CourseName,
                     CourseDescription = course.CourseDescription,
+                    CourseDirectory = course.CourseDirectory,
+                    CourseImageURL = course.CourseImageURL,
                     CoursePrice = course.CoursePrice.HasValue ? course.CoursePrice.Value : 0, // Handling nullable float
                     CourseCategory = course.CourseCategory != null ? new CategoryDTO
                     {
@@ -136,6 +138,10 @@ namespace ebyteLearner.Data.Repository
                 {
                     courseDB.CoursePrice = request.CoursePrice.Value;
                 }
+                if (!string.IsNullOrEmpty(request.CourseImageURL))
+                {
+                    courseDB.CourseImageURL = request.CourseImageURL;
+                }
 
                 try
                 {
@@ -158,7 +164,6 @@ namespace ebyteLearner.Data.Repository
             }
         }
 
-
         public async Task Delete(Guid id)
         {
             var course = await _dbContext.Course.FindAsync(id);
@@ -171,6 +176,7 @@ namespace ebyteLearner.Data.Repository
             else
                 throw new AppException("Course '" + id + "' not found");
         }
+
         public async Task<IEnumerable<CourseDTO>> ReadAllCourses()
         {
             var coursesWithModules = await _dbContext.Course
@@ -189,6 +195,8 @@ namespace ebyteLearner.Data.Repository
                 Id = course.Id,
                 CourseName = course.CourseName,
                 CourseDescription = course.CourseDescription,
+                CourseDirectory = course.CourseDirectory,
+                CourseImageURL = course.CourseImageURL,
                 CoursePrice = course.CoursePrice.HasValue ? course.CoursePrice.Value : 0, // Handling nullable float
                 CourseCategory = course.CourseCategory != null ? new CategoryDTO
                 {

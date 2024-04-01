@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ebyteLearner")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+61d082d85199f975a444148b961839a130b8c198")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ebyteLearner")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ebyteLearner")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -4,6 +4,7 @@ using ebyteLearner.DTOs.Course;
 using ebyteLearner.Services;
 using System.ComponentModel.DataAnnotations;
 using ebyteLearner.DTOs.Module;
+using iTextSharp.text.pdf;
 
 namespace ebyteLearner.Controllers
 {
@@ -112,6 +113,43 @@ namespace ebyteLearner.Controllers
             {
                 _logger.LogError(ex.Message);
                 return StatusCode(StatusCodes.Status500InternalServerError, $"An unexpected error occurred: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Upload a PDF file to a module.
+        /// </summary>
+        /// <remarks>
+        /// Uploads a PDF file to the specified module.
+        /// </remarks>
+        /// <param name="file">The PDF file to upload.</param>
+        /// <param name="courseId">The ID of the module to which the PDF file will be uploaded.</param>
+        /// <returns>Returns a message indicating the success of the upload operation.</returns>
+        [HttpPut("{courseId}/UploadCourseImage")]
+        public async Task<IActionResult> UploadCourseImage(IFormFile file, [FromRoute] Guid courseId)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("File not selected or file is empty");
+
+            if ((Path.GetExtension(file.FileName).ToLower() != ".png") && Path.GetExtension(file.FileName).ToLower() != ".jpeg" && Path.GetExtension(file.FileName).ToLower() != ".jpg")
+                return BadRequest("Only PNG, JPEG or JPG files are allowed");
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+               
+                long contentLength = file.Length;
+                // Pass the base64 content to your service method
+                var result = await _courseService.UploadCourseImage(memoryStream, courseId, file.FileName, file.ContentType);
+
+                if (result.rows > 0)
+                {
+                    return Ok(result.course);
+                }
+                else
+                {
+                    return StatusCode(500, "Failed to upload PDF");
+                }
             }
         }
 

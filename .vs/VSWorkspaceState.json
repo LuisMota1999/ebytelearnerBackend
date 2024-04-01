@@ -2,10 +2,8 @@
   "ExpandedNodes": [
     "",
     "\\ebyteLearner",
-    "\\ebyteLearner\\Controllers",
-    "\\ebyteLearner\\Models",
     "\\ebyteLearner\\Services"
   ],
-  "SelectedNode": "\\ebyteLearner\\Controllers\\ModuleController.cs",
+  "SelectedNode": "\\ebyteLearner\\Services\\CourseService.cs",
   "PreviewInSolutionExplorer": false
 }

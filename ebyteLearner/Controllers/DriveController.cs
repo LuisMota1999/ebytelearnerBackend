@@ -90,12 +90,12 @@ namespace ebyteLearner.Controllers
         /// </remarks>
         /// <returns>Returns the list of files in the folder.</returns>
         [AllowAnonymous]
-        [HttpGet("GetFilesFromFolder")]
-        public IActionResult GetFiles()
+        [HttpGet("GetFilesFromFolder/{id}")]
+        public IActionResult GetFiles([FromRoute] string id)
         {
             try
             {
-                var response = _driveService.GetFilesFromFolder();
+                var response = _driveService.GetFilesFromFolder(id);
                 return Ok(response);
             }
             catch (Exception e)

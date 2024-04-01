@@ -10,6 +10,7 @@ namespace ebyteLearner.DTOs.Course
         public string CourseName { get; set; }
         public string CourseDescription { get; set; }
         public string CourseImageURL { get; set; }
+        public string CourseDirectory { get; set; }
         public float CoursePrice { get; set; }
         public CategoryDTO CourseCategory { get; set; }
         public List<ModuleDTO> CourseModules { get; set; }

@@ -2,6 +2,8 @@
 using ebyteLearner.Data.Repository;
 using ebyteLearner.DTOs.Course;
 using ebyteLearner.Helpers;
+using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 
 namespace ebyteLearner.Services
 {
@@ -13,6 +15,7 @@ namespace ebyteLearner.Services
         Task<(int rows, CourseDTO course)> UpdateCourse(Guid id, UpdateCourseRequestDTO request);
         Task DeleteCourse(Guid id);
         Task<int> AssocModuleToCourse(AssociateModuleRequest associateModuleRequest);
+        Task<(int rows, CourseDTO course)> UploadCourseImage(MemoryStream file, Guid courseId, string fileName, string contentType);
     }
 
     public class CourseService : ICourseService
@@ -46,6 +49,50 @@ namespace ebyteLearner.Services
             return response;
         }
 
+        public async Task<(int rows, CourseDTO course)> UploadCourseImage(MemoryStream file, Guid courseId, string fileName, string contentType)
+        {
+
+            try
+            {
+                var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
+                if (cachedCourses != null)
+                    _cacheService.RemoveData("GetAllCourses");
+
+                if (file.Length <= 0)
+                {
+                    _logger.LogError("Uploading file to Google Drive failed. Can not upload 0 byte file to drive.");
+                    throw new ValidationException();
+                }
+
+                var course = await _courseRepository.Read(courseId);
+                if (course == null)
+                {
+                    _logger.LogError($"Course {courseId} not found");
+                    throw new ValidationException($"Course {courseId} not found");
+                }
+
+                var description = "File_" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
+
+                var imagepath = await _driveServiceHelper.UploadFile(file, fileName, contentType, course.CourseDirectory, description);
+
+                _logger.LogInformation("Uploading file to Google Drive complete. Image Url: ", imagepath);
+
+                if (imagepath.IsNullOrEmpty())
+                {
+                    throw new ValidationException($"Image Url not found");
+                }
+
+                var updateRequest = new UpdateCourseRequestDTO();
+                updateRequest.CourseImageURL = imagepath;
+                var (rows, response) = await _courseRepository.Update(courseId, updateRequest);
+                return (rows, response);
+            }
+            catch (Exception ex)
+            {
+                throw new AppException(ex.Message);
+            }
+        }
+
         public async Task<int> CreateCourse(CreateCourseRequestDTO request)
         {
             var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
@@ -56,9 +103,11 @@ namespace ebyteLearner.Services
             return await _courseRepository.Create(request);
         }
 
-        public async Task<(int,CourseDTO)> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
-        {   
-
+        public async Task<(int, CourseDTO)> UpdateCourse(Guid id, UpdateCourseRequestDTO request)
+        {
+            var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
+            if (cachedCourses != null)
+                _cacheService.RemoveData("GetAllCourses");
             var (rows, response) = await _courseRepository.Update(id, request);
             return (rows, response);
         }
