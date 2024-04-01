@@ -16,7 +16,7 @@ namespace ebyteLearner.Data.Repository
         Task<CourseDTO> Read(Guid id);
         Task<IEnumerable<CourseDTO>> ReadAllCourses();
         Task Delete(Guid id);
-        Task<int> Create(CreateCourseRequestDTO request);
+        Task<(int rowsAffected, CourseDTO courseDTO)> Create(CreateCourseRequestDTO request);
         Task<int> AssociateModuleToCourse(Guid courseId, Guid moduleId);
     }
 
@@ -32,7 +32,7 @@ namespace ebyteLearner.Data.Repository
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public async Task<int> Create(CreateCourseRequestDTO request)
+        public async Task<(int rowsAffected, CourseDTO courseDTO)> Create(CreateCourseRequestDTO request)
         {
 
             //if (_dbContext.Category.Find(request.CategoryId) == null)
@@ -62,7 +62,8 @@ namespace ebyteLearner.Data.Repository
                 // Log successful creation
                 _logger.LogInformation($"Created course with ID: {course.Id}, rows affected: {rowsAffected}");
 
-                return rowsAffected;
+                
+                return (rowsAffected, _mapper.Map<CourseDTO>(course));
             }
             catch (Exception ex)
             {

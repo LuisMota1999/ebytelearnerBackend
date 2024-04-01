@@ -11,7 +11,7 @@ namespace ebyteLearner.Services
     {
         Task<IEnumerable<CourseDTO>> GetAllCourses(int returnRows = 0);
         Task<CourseDTO> GetCourse(Guid id);
-        Task<int> CreateCourse(CreateCourseRequestDTO request);
+        Task<(int rows, CourseDTO course)> CreateCourse(CreateCourseRequestDTO request);
         Task<(int rows, CourseDTO course)> UpdateCourse(Guid id, UpdateCourseRequestDTO request);
         Task DeleteCourse(Guid id);
         Task<int> AssocModuleToCourse(AssociateModuleRequest associateModuleRequest);
@@ -93,14 +93,17 @@ namespace ebyteLearner.Services
             }
         }
 
-        public async Task<int> CreateCourse(CreateCourseRequestDTO request)
+        public async Task<(int rows, CourseDTO course)> CreateCourse(CreateCourseRequestDTO request)
         {
             var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
             if (cachedCourses != null)
                 _cacheService.RemoveData("GetAllCourses");
 
             request.CourseDirectory = await _driveServiceHelper.CreateFolder(request.CourseName);
-            return await _courseRepository.Create(request);
+
+            var(rows, response) = await _courseRepository.Create(request);
+            return (rows, response);
+            
         }
 
         public async Task<(int, CourseDTO)> UpdateCourse(Guid id, UpdateCourseRequestDTO request)

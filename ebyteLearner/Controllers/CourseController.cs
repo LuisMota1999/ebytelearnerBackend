@@ -137,7 +137,7 @@ namespace ebyteLearner.Controllers
             using (var memoryStream = new MemoryStream())
             {
                 await file.CopyToAsync(memoryStream);
-               
+
                 long contentLength = file.Length;
                 // Pass the base64 content to your service method
                 var result = await _courseService.UploadCourseImage(memoryStream, courseId, file.FileName, file.ContentType);
@@ -193,13 +193,16 @@ namespace ebyteLearner.Controllers
         [HttpPost("Create")]
         public async Task<IActionResult> CreateCourse([FromBody] CreateCourseRequestDTO request)
         {
+
             try
             {
-                int rowsAffected = await _courseService.CreateCourse(request);
+                var result = await _courseService.CreateCourse(request);
+                int rowsAffected = result.rows;
+                CourseDTO createdCourse = result.course;
 
                 if (rowsAffected > 0)
                 {
-                    return Ok($"Course named {request.CourseName} created successfully!");
+                    return Ok(createdCourse);
                 }
                 else
                 {
