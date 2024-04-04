@@ -126,22 +126,27 @@ namespace ebyteLearner.Data.Repository
             var courseDB = await _dbContext.Course.FindAsync(id);
             if (courseDB != null)
             {
-                // Atualize apenas os campos não nulos presentes na solicitação
-                if (!string.IsNullOrEmpty(request.CourseName))
+                courseDB.CourseName = request.CourseName ?? courseDB.CourseName;
+                courseDB.CourseDescription = request.CourseDescription ?? courseDB.CourseDescription;
+                courseDB.CoursePrice = request.CoursePrice ?? courseDB.CoursePrice;
+                courseDB.CourseImageURL = request.CourseImageURL ?? courseDB.CourseImageURL;
+
+                if (request.CategoryId != Guid.Empty)
                 {
-                    courseDB.CourseName = request.CourseName;
+                    var category = await _dbContext.Category.FindAsync(request.CategoryId);
+                    if (category != null)
+                    {
+                        courseDB.CourseCategory = category;
+                    }
                 }
-                if (!string.IsNullOrEmpty(request.CourseDescription))
+
+                if (request.CourseTeacherID != Guid.Empty)
                 {
-                    courseDB.CourseDescription = request.CourseDescription;
-                }
-                if (request.CoursePrice.HasValue)
-                {
-                    courseDB.CoursePrice = request.CoursePrice.Value;
-                }
-                if (!string.IsNullOrEmpty(request.CourseImageURL))
-                {
-                    courseDB.CourseImageURL = request.CourseImageURL;
+                    var teacher = await _dbContext.User.FindAsync(request.CourseTeacherID);
+                    if (teacher != null)
+                    {
+                        courseDB.CourseTeacher = teacher;
+                    }
                 }
 
                 try
@@ -164,6 +169,7 @@ namespace ebyteLearner.Data.Repository
                 throw new AppException($"Course with ID '{id}' not found.");
             }
         }
+
 
         public async Task Delete(Guid id)
         {
