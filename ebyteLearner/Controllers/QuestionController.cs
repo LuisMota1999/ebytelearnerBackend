@@ -85,7 +85,7 @@ namespace ebyteLearner.Controllers
         /// <param name="id">The unique identifier of the question to remove.</param>
         /// <param name="questionID">The ID of the question to delete.</param>
         /// <returns>Returns a message indicating the success of the delete operation.</returns>
-        [HttpPost("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public IActionResult RemoveQuestion([FromRoute] Guid id, [FromBody] Guid questionID)
         {
             try

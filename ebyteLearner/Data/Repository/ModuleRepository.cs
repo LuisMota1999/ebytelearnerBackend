@@ -1,4 +1,5 @@
 using AutoMapper;
+using ebyteLearner.DTOs.Course;
 using ebyteLearner.DTOs.Module;
 using ebyteLearner.Helpers;
 using ebyteLearner.Models;
@@ -11,7 +12,7 @@ namespace ebyteLearner.Data.Repository
     {
         Task<(int rowsAffected, ModuleDTO module)> Create(CreateModuleRequestDTO request);
         Task<ModuleDTO> Read(Guid id);
-        Task<ModuleDTO> Update(Guid id, UpdateModuleRequestDTO request);
+        Task<(int rowsAffected, ModuleDTO moduleDTO)> Update(Guid id, UpdateModuleRequestDTO request);
         Task Delete(Guid id);
 
     }
@@ -57,7 +58,6 @@ namespace ebyteLearner.Data.Repository
             }
         }
 
-
         public async Task<ModuleDTO> Read(Guid id)
         {
             var moduleDB = await _dbContext.Module.FindAsync(id);
@@ -71,25 +71,46 @@ namespace ebyteLearner.Data.Repository
             return courseResponse;
         }
 
-        public async Task<ModuleDTO> Update(Guid id, UpdateModuleRequestDTO request)
+        public async Task<(int rowsAffected, ModuleDTO moduleDTO)> Update(Guid id, UpdateModuleRequestDTO request)
         {
 
             if (request == null)
             {
                 throw new ArgumentNullException(nameof(request));
             }
-
             var moduleDB = await _dbContext.Module.FindAsync(id);
+            
             if (moduleDB != null)
             {
-                _mapper.Map(request, moduleDB);
-                await _dbContext.SaveChangesAsync();
-                var updatedModule = _mapper.Map<ModuleDTO>(moduleDB);
-
-                return updatedModule;
+                moduleDB.ModuleName = request.ModuleName ?? moduleDB.ModuleName;
+                moduleDB.ModuleDescription = request.ModuleDescription ?? moduleDB.ModuleDescription;
+                moduleDB.isFree = request.isFree ?? moduleDB.isFree;
+                
+                if (request.ModulePDFId != Guid.Empty)
+                {
+                    moduleDB.ModulePDFId = request.ModulePDFId!;
+                }
+                try
+                {
+                    var rowsAffected = await _dbContext.SaveChangesAsync();
+                    _logger.LogInformation($"Updated Course with ID: {moduleDB.Id}, rows affected: {rowsAffected}");
+                    return (rowsAffected, _mapper.Map<ModuleDTO>(moduleDB));
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    throw new AppException("Concurrency conflict occurred while updating the module.", ex);
+                }
+                catch (DbUpdateException ex)
+                {
+                    throw new AppException("Error occurred while updating the module in the database.", ex);
+                }
             }
             else
-                throw new AppException("Module '" + id + "' not found");
+            {
+                throw new AppException($"Module with ID '{id}' not found.");
+            }
+
+            
         }
 
         public async Task Delete(Guid id)

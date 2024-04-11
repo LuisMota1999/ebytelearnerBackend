@@ -137,9 +137,9 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<ICacheService, CacheService>();
 builder.Services.AddScoped<IDriveServiceHelper, DriveServiceHelper>();
 
-
 //Utils
 builder.Services.AddScoped<IJwtUtils, JwtUtils>();
+builder.Services.AddSignalR();
 
 var mapperConfig = new MapperConfiguration(mc =>
 {

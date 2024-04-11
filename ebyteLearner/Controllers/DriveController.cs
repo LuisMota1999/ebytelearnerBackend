@@ -127,35 +127,32 @@ namespace ebyteLearner.Controllers
         }
 
         /// <summary>
-        /// Download a file from Google Drive.
+        /// Get File from Google Drive.
         /// </summary>
         /// <remarks>
-        /// Downloads the specified file from Google Drive.
+        /// Get the specified file from Google Drive.
         /// </remarks>
         /// <param name="fileId">The ID of the file to download.</param>
-        /// <returns>Returns the downloaded file.</returns>
+        /// <returns>Returns the base64 file.</returns>
         [AllowAnonymous]
         [HttpGet("{fileId}")]
-        public IActionResult DownloadFile(string fileId)
+        public async Task<IActionResult> GetFile(string fileId)
         {
             try
             {
-                var response = _driveService.DriveDownloadFile(fileId);
+                var response = await _driveService.GetFile(fileId);
 
                 if (response == null)
                 {
                     return NotFound();
                 }
 
-                var (stream, name) = response.Value;
-
-                stream.Seek(0, SeekOrigin.Begin);
-
-                return File(stream, "application/octet-stream", name);
+                return Ok(response);
             }
             catch (Exception e)
             {
-                return StatusCode(500, $"An error occurred: {e.Message}");
+                _logger.LogError($"An error occurred: {e}");
+                return StatusCode(500, "An error occurred while processing your request.");
             }
         }
     }

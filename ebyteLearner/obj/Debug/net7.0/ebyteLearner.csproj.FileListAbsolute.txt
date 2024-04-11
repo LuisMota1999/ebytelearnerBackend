@@ -229,3 +229,11 @@ C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\ebyteLea
 C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\obj\Debug\net7.0\ebyteLearner.xml
 C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\bin\Debug\net7.0\ebyteLearner.xml
 C:\Users\luisp\source\repos\ebytelearnerBackend\ebyteLearner\obj\Debug\net7.0\ebyteLearner.xml
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.Connections.Abstractions.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Common.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\LPMOTA\source\repos\ebyteLearner\ebyteLearner\bin\Debug\net7.0\Microsoft.Extensions.Features.dll

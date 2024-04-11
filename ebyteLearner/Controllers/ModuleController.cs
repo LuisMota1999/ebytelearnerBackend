@@ -86,7 +86,7 @@ namespace ebyteLearner.Controllers
         /// </remarks>
         /// <param name="id">The unique identifier of the module to remove.</param>
         /// <returns>Returns a message indicating the success of the delete operation.</returns>
-        [HttpPost("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> RemoveModule([FromRoute] Guid id)
         {
             try

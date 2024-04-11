@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ebyteLearner.Data.Repository;
+using ebyteLearner.DTOs.Course;
 using ebyteLearner.DTOs.Module;
 using Org.BouncyCastle.Asn1.Ocsp;
 
@@ -9,7 +10,7 @@ namespace ebyteLearner.Services
     {
         Task<(int rows, ModuleDTO module)> CreateModule(CreateModuleRequestDTO request);
         Task<ModuleDTO> GetModule(Guid id);
-        Task<ModuleDTO> UpdateModule(Guid Id, UpdateModuleRequestDTO request);
+        Task<(int rows, ModuleDTO moduleDTO)> UpdateModule(Guid Id, UpdateModuleRequestDTO request);
         Task DeleteModule(Guid id);
 
     }
@@ -34,12 +35,14 @@ namespace ebyteLearner.Services
             var (rows, response) = await _moduleRepository.Create(request);
             return (rows, response);
         }
-        public async Task<ModuleDTO> UpdateModule(Guid Id, UpdateModuleRequestDTO request)
+        public async Task<(int rows, ModuleDTO moduleDTO)> UpdateModule(Guid Id, UpdateModuleRequestDTO request)
         {
-            var response = await _moduleRepository.Update(Id, request);
-            var expiryTime = DateTimeOffset.Now.AddMinutes(60);
-            _cacheService.SetData<ModuleDTO>(Id.ToString(), response, expiryTime);
-            return response;
+
+            var cachedModules = _cacheService.GetData<IEnumerable<ModuleDTO>>("GetAllModules");
+            if (cachedModules != null)
+                _cacheService.RemoveData("GetAllModules");
+            var (rows, response) = await _moduleRepository.Update(Id, request);
+            return (rows, response);
         }
 
         public async Task<ModuleDTO> GetModule(Guid id)

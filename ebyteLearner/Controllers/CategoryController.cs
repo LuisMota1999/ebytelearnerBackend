@@ -117,7 +117,7 @@ namespace ebyteLearner.Controllers
         /// </remarks>
         /// <param name="id">The unique identifier of the category to delete.</param>
         /// <returns>Returns a message indicating the success of the delete operation.</returns>
-        [HttpPost("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public IActionResult DeleteCategory([FromRoute] Guid id)
         {
             try

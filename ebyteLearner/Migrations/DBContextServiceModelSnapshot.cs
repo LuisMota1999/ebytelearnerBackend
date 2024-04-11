@@ -143,6 +143,9 @@ namespace ebyteLearner.Migrations
                     b.Property<int?>("ModuleOrder")
                         .HasColumnType("int");
 
+                    b.Property<Guid>("ModulePDFId")
+                        .HasColumnType("char(36)");
+
                     b.Property<DateTimeOffset>("UpdatedDate")
                         .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("datetime(6)");
@@ -156,6 +159,9 @@ namespace ebyteLearner.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CourseId");
+
+                    b.HasIndex("ModulePDFId")
+                        .IsUnique();
 
                     b.ToTable("Module");
                 });
@@ -445,7 +451,15 @@ namespace ebyteLearner.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ebyteLearner.Models.Pdf", "Pdf")
+                        .WithOne()
+                        .HasForeignKey("ebyteLearner.Models.Module", "ModulePDFId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Course");
+
+                    b.Navigation("Pdf");
                 });
 
             modelBuilder.Entity("ebyteLearner.Models.Pdf", b =>

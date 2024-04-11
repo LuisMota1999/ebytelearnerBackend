@@ -7,5 +7,7 @@ namespace ebyteLearner.DTOs.Module
         public string? ModuleName { get; set; }
         public string? ModuleDescription { get; set; }
         public string? CourseId { get; set; }
+        public bool? isFree { get; set; }
+        public Guid ModulePDFId { get; set; }
     }
 }

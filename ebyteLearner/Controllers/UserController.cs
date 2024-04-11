@@ -170,7 +170,7 @@ namespace ebyteLearner.Controllers
         /// </remarks>
         /// <param name="id">The unique identifier of the user to remove.</param>
         /// <returns>Returns a message indicating the success of the delete operation.</returns>
-        [HttpPost("Delete/{id}")]
+        [HttpDelete("Delete/{id}")]
         public async Task<IActionResult> RemoveUser([FromRoute] Guid id)
         {
             try

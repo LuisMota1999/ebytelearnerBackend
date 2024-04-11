@@ -7,9 +7,7 @@ using Google.Apis.Util.Store;
 using Microsoft.IdentityModel.Tokens;
 using Google.Apis.Download;
 using System.ComponentModel.DataAnnotations;
-using ebyteLearner.Models;
-using System.IO;
-using System.Net.Mail;
+using ebyteLearner.DTOs.GoogleDrive;
 
 namespace ebyteLearner.Services
 {
@@ -21,7 +19,7 @@ namespace ebyteLearner.Services
         void DeleteFile(string fileId);
         IEnumerable<Google.Apis.Drive.v3.Data.File> GetFilesFromFolder(string folder = "");
         IEnumerable<Google.Apis.Drive.v3.Data.File> GetFolders();
-        (MemoryStream stream, string name)? DriveDownloadFile(string fileId);
+        Task<GoogleDriveFileResponseDTO> GetFile(string fileId);
     }
     public class DriveServiceHelper : IDriveServiceHelper
     {
@@ -89,7 +87,7 @@ namespace ebyteLearner.Services
             driveFolder.Name = folderName;
             driveFolder.MimeType = "application/vnd.google-apps.folder";
             driveFolder.Parents = new string[] { parent };
-            driveFolder.Description = "File_"+DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
+            driveFolder.Description = "File_" + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second;
             var command = service.Files.Create(driveFolder);
             var file = await command.ExecuteAsync();
             return file.Id;
@@ -118,10 +116,10 @@ namespace ebyteLearner.Services
             requestPermission.Type = "user"; //"user"; "group"; "domain"; "anyone";
             requestPermission.EmailAddress = emailAddress;
             requestPermission.Role = userRole; //"reader", "writer", "owner", "organizer"
- 
+
             var command = service.Permissions.Create(requestPermission, directoryId);
             var file = await command.ExecuteAsync();
-            
+
             return file.Id;
         }
 
@@ -210,11 +208,10 @@ namespace ebyteLearner.Services
             return result;
         }
 
-        public (MemoryStream stream, string name)? DriveDownloadFile(string fileId)
+        public async Task<GoogleDriveFileResponseDTO> GetFile(string fileId)
         {
             try
             {
-
                 DriveService service = GetService();
 
                 var request = service.Files.Get(fileId);
@@ -226,38 +223,38 @@ namespace ebyteLearner.Services
                         switch (progress.Status)
                         {
                             case DownloadStatus.Downloading:
-                                {
-                                    _logger.LogInformation($"Download progress: {progress.BytesDownloaded}");
-                                    break;
-                                }
+                                _logger.LogInformation($"Download progress: {progress.BytesDownloaded}");
+                                break;
                             case DownloadStatus.Completed:
-                                {
-                                    _logger.LogInformation("Download complete.");
-                                    break;
-                                }
+                                _logger.LogInformation("Download complete.");
+                                break;
                             case DownloadStatus.Failed:
-                                {
-                                    _logger.LogInformation("Download failed.");
-                                    break;
-                                }
+                                _logger.LogInformation("Download failed.");
+                                break;
                         }
                     };
-                request.Download(stream);
+                await request.DownloadAsync(stream);
+                
+                stream.Seek(0, SeekOrigin.Begin);
+                var fileContent = Convert.ToBase64String(stream.ToArray());
 
-                return (stream, name);
+                var response = new GoogleDriveFileResponseDTO();
+                response.FileContent = fileContent;
+                response.FileId = fileId;
+                response.FileName = name;
+
+                return response;
+            }
+            catch (AggregateException)
+            {
+                _logger.LogError($"Credential Not found");
+                throw; // Rethrow the exception to propagate it further if needed
             }
             catch (Exception e)
             {
-                if (e is AggregateException)
-                {
-                    _logger.LogError($"Credential Not found");
-                }
-                else
-                {
-                    throw;
-                }
+                _logger.LogError($"An error occurred: {e}");
+                throw; // Rethrow the exception to propagate it further if needed
             }
-            return null;
         }
     }
 }
