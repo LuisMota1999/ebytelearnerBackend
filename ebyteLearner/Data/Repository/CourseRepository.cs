@@ -137,6 +137,7 @@ namespace ebyteLearner.Data.Repository
                     if (category != null)
                     {
                         courseDB.CourseCategory = category;
+                        courseDB.CategoryID = request.CategoryId;
                     }
                 }
 
@@ -146,6 +147,7 @@ namespace ebyteLearner.Data.Repository
                     if (teacher != null)
                     {
                         courseDB.CourseTeacher = teacher;
+                        courseDB.CourseTeacherID = request.CourseTeacherID;
                     }
                 }
 

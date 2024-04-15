@@ -102,7 +102,7 @@ namespace ebyteLearner.Controllers
                 }
                 else
                 {
-                    return StatusCode(StatusCodes.Status409Conflict, "Failed to create module");
+                    return StatusCode(StatusCodes.Status409Conflict, "Failed to update course");
                 }
             }
             catch (ValidationException ex)
