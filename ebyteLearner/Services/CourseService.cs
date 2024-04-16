@@ -95,10 +95,6 @@ namespace ebyteLearner.Services
 
         public async Task<(int rows, CourseDTO course)> CreateCourse(CreateCourseRequestDTO request)
         {
-            var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
-            if (cachedCourses != null)
-                _cacheService.RemoveData("GetAllCourses");
-
             request.CourseDirectory = await _driveServiceHelper.CreateFolder(request.CourseName);
 
             var(rows, response) = await _courseRepository.Create(request);
@@ -124,15 +120,8 @@ namespace ebyteLearner.Services
 
         public async Task<IEnumerable<CourseDTO>> GetAllCourses(int returnRows = 10)
         {
-            var cachedCourses = _cacheService.GetData<IEnumerable<CourseDTO>>("GetAllCourses");
-            if (cachedCourses != null)
-                return cachedCourses.TakeLast(returnRows);
-
-            var expiryTime = DateTimeOffset.Now.AddMinutes(5);
-
+          
             var response = await _courseRepository.ReadAllCourses();
-
-            _cacheService.SetData<IEnumerable<CourseDTO>>("GetAllCourses", response, expiryTime);
 
             if (returnRows > 0)
             {
