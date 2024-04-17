@@ -130,6 +130,7 @@ namespace ebyteLearner.Data.Repository
                 courseDB.CourseDescription = request.CourseDescription ?? courseDB.CourseDescription;
                 courseDB.CoursePrice = request.CoursePrice ?? courseDB.CoursePrice;
                 courseDB.CourseImageURL = request.CourseImageURL ?? courseDB.CourseImageURL;
+                courseDB.CourseIsPublished = request.CourseIsPublished ?? courseDB.CourseIsPublished;
 
                 if (request.CategoryId != Guid.Empty)
                 {

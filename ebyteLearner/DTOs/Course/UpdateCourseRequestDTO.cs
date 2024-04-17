@@ -10,5 +10,7 @@ namespace ebyteLearner.DTOs.Course
         public string? CourseImageURL { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? CourseTeacherID { get; set; }
+
+        public bool? CourseIsPublished { get; set; }
     }
 }
