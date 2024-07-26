@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "I6cxgl+xaXuByXxAnRb4kWJQsMWqfH5RsEeCTP0sd8/bvt0s8jQvqgcpBx0GVLyMMoP5SOuNImDqc4OKEkgvcg==",
+  "dgSpecHash": "P29y6WJbLuR1UlHZQZQesbqoQXZSjovxlvALqRve9rxVzHh38rkWy5GZi2YNv2EJXSjSFY0XfcoiKofvuFz+UQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\LPMOTA\\source\\repos\\ebyteLearner\\ebyteLearner\\ebyteLearner.csproj",
   "expectedPackageFiles": [
@@ -132,10 +132,10 @@
     "C:\\Users\\LPMOTA\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\LPMOTA\\.nuget\\packages\\system.windows.extensions\\7.0.0\\system.windows.extensions.7.0.0.nupkg.sha512",
-    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.17\\microsoft.windowsdesktop.app.ref.7.0.17.nupkg.sha512",
-    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.17\\microsoft.netcore.app.ref.7.0.17.nupkg.sha512",
-    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.17\\microsoft.aspnetcore.app.ref.7.0.17.nupkg.sha512",
-    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.17\\microsoft.netcore.app.host.win-x64.7.0.17.nupkg.sha512"
+    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.20\\microsoft.windowsdesktop.app.ref.7.0.20.nupkg.sha512",
+    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.20\\microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
+    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.20\\microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512",
+    "C:\\Users\\LPMOTA\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.20\\microsoft.netcore.app.host.win-x64.7.0.20.nupkg.sha512"
   ],
   "logs": [
     {
